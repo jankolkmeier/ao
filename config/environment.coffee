@@ -13,6 +13,6 @@ module.exports = (web, express, settings) ->
         }
         secret : settings.sessionsecret,
         store  : new Session({
-            dbname : settings.sessiondb
+            dbname : settings.dbname
         })
     }

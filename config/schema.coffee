@@ -48,7 +48,7 @@ module.exports = (settings) ->
         }
     }
 
-    orm.connect 'mongodb://localhost/'+settings.maindb
+    orm.connect 'mongodb://localhost/'+settings.dbname
 
     orm.model 'User', User
     this.User = orm.model('User')
