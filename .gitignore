@@ -1,0 +1,6 @@
+desktop.ini
+*~
+*.swp
+
+config/settings.coffee
+node_modules
