@@ -6,5 +6,11 @@ web       = module.exports = express.createServer()
 require('./config/environment.coffee')(web, express, settings)
 
 require('./routes/main.coffee')(web, db, helper)
+require('./routes/chores.coffee')(web, db, helper)
+
+app.error (err, req, res, next) ->
+    if err instanceof helper.NotFound
+        return res.render '404'
+    next err
 
 web.listen settings.httpPort
