@@ -2,8 +2,10 @@ module.exports = (settings) ->
     orm      = require 'mongoose'
     Schema = orm.Schema
     ObjectId = orm.Schema.ObjectId
+    
+    orm.connect 'mongodb://localhost/'+settings.dbname
 
-    User = new Schema {
+    UserSchema = new Schema {
         nick  : {
             type : String
             unique : true
@@ -25,19 +27,27 @@ module.exports = (settings) ->
         }
     }
 
-    Chore = new Schema {
+    orm.model 'User', UserSchema
+    this.User = orm.model('User')
+
+
+    ChoreSchema = new Schema {
         name  : {
             type : String
             unique : true
         }
     }
 
-    Log = new Schema {
-        chore : {
+    orm.model 'Chore', ChoreSchema
+    this.Chore = orm.model('Chore')
+
+
+    LogSchema = new Schema {
+        choreid : {
             type : ObjectId
             required : true
         }
-        user  : {
+        userid  : {
             type : ObjectId
             required : true
         }
@@ -48,14 +58,28 @@ module.exports = (settings) ->
         }
     }
 
-    orm.connect 'mongodb://localhost/'+settings.dbname
+    LogSchema.virtual('user')
+        .set (user) ->
+            this.userid = user._id
 
-    orm.model 'User', User
-    this.User = orm.model('User')
+    LogSchema.method {
+        getUser: (cb) ->
+            this.User.find { 'userid' : this.userid }, (err, docs) ->
+                cb(if not err and docs[0] then docs[0] else err)
+    }
 
-    orm.model 'Chore', Chore
-    this.Chore = orm.model('Chore')
+    LogSchema.virtual('chore')
+        .set (chore) ->
+            this.choreid = chore._id
 
-    orm.model 'Log', Log
+    LogSchema.method {
+        getChore: (cb) ->
+            this.Chore.find { 'choreid' : this.choreid }, (err, docs) ->
+                cb(if not err and docs[0] then docs[0] else err)
+    }
+
+    orm.model 'Log', LogSchema
     this.Log = orm.model('Log')
+
+
     return this
