@@ -1,7 +1,7 @@
 module.exports = (web, db, h) ->
     web.get '/chores', (req, res, next) ->
         db.Chore.find {}, (err, docs) ->
-            return next new h.DBError("Can't save Chore", '/chores/new', err) if err
+            return next new h.DBError("Can't get Chores", '/chores', err) if err
             res.render 'chores', context : { chores : docs }
 
     web.get '/chores/new', (req, res) ->
@@ -21,7 +21,6 @@ module.exports = (web, db, h) ->
     web.post '/chores/save', (req, res, next) ->
         return if not h.authed(req, res)
         cb = (chore) ->
-            console.log chore
             chore.name = req.body.name
             chore.save (err) ->
                 if err and err.name == 'ValidationError'

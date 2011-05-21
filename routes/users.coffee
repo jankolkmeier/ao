@@ -3,12 +3,12 @@ module.exports = (web, db, h) ->
 
     web.get '/users', (req, res, next) ->
         db.User.find {}, (err, docs) ->
-            return next new h.DBError("Can't save Chore", '/chores/new', err) if err
-            res.render 'chores', context : { chores : docs }
+            return next new h.DBError("Can't get Users", '/users', err) if err
+            res.render 'users', context : { users : docs }
 
     web.get '/user/:id', (req, res, next) ->
-        findChore req.params.id, next, (chore) ->
-            res.render 'chore', context : { chore : chore }
+        h.findUser req.params.id, next, (user) ->
+            res.render 'user', context : { user : user }
 
     web.get '/login', (req, res) ->
         res.render 'login', context: { redirect: req.query.redirect }
