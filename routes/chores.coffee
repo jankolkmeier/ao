@@ -45,3 +45,12 @@ module.exports = (web, db, h) ->
         h.findChore req.params.id, next, (chore) ->
             res.render 'chore', context : { chore : chore }
 
+    web.get '/chores/do/:id', (req, res, next) ->
+        if not h.authed(req, res, next) then return
+        newLog = new db.Log {
+            userid : req.session.user._id
+            choreid : req.params.id
+        }
+        newLog.save (err) ->
+            return next new h.DBError("Can't Log this", '/chore'+req.params.id, err) if err
+            res.redirect '/'

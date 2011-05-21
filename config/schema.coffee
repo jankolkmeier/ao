@@ -58,26 +58,6 @@ module.exports = (settings) ->
         }
     }
 
-    LogSchema.virtual('user')
-        .set (user) ->
-            this.userid = user._id
-
-    LogSchema.method {
-        getUser: (cb) ->
-            this.User.find { 'userid' : this.userid }, (err, docs) ->
-                cb(if not err and docs[0] then docs[0] else err)
-    }
-
-    LogSchema.virtual('chore')
-        .set (chore) ->
-            this.choreid = chore._id
-
-    LogSchema.method {
-        getChore: (cb) ->
-            this.Chore.find { 'choreid' : this.choreid }, (err, docs) ->
-                cb(if not err and docs[0] then docs[0] else err)
-    }
-
     orm.model 'Log', LogSchema
     this.Log = orm.model('Log')
 
