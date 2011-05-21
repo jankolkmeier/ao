@@ -1,16 +1,13 @@
 express   = require('express')
 settings  = require('./config/settings.coffee')
-helper    = require('./helper.coffee')
 db        = require('./config/schema.coffee')(settings)
+h         = require('./helper.coffee')(db)
 web       = module.exports = express.createServer()
+
 require('./config/environment.coffee')(web, express, settings)
 
-require('./routes/main.coffee')(web, db, helper)
-require('./routes/chores.coffee')(web, db, helper)
-
-app.error (err, req, res, next) ->
-    if err instanceof helper.NotFound
-        return res.render '404'
-    next err
+require('./routes/main.coffee')(web, db, h)
+require('./routes/users.coffee')(web, db, h)
+require('./routes/chores.coffee')(web, db, h)
 
 web.listen settings.httpPort

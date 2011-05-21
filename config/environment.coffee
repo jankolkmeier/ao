@@ -7,7 +7,7 @@ module.exports = (web, express, settings) ->
     web.use      express.bodyParser()
     web.use      express.cookieParser()
     web.use      express.session {
-        cookie : { 
+        cookie : {
             maxAge : 60000 * 60 * 24 * 14
             path   : '/'
         }
