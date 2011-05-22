@@ -26,23 +26,20 @@ module.exports = (db) ->
         Error.captureStackTrace this, arguments.callee
     this.DBError.prototype.__proto__ = Error.prototype
 
-    this.findUser = (id, next, cb) ->
-        db.User.findById id, (err, user) ->
-            return cb(false) if not next and (err or not user)
+    this.findItem = (model, id, redir, next, cb) ->
+        model.findById id, (err, item) ->
+            return cb(false) if not next and (err or not item)
             if err
-                return next new this.DBError("Can't get User", '/users', err)
-            if not user 
-                return next new this.NotFound("Unknown User", '/users', err)
-            cb(user)
+                return next new this.DBError("Can't get Item", redir, err)
+            if not item
+                return next new this.NotFound("Unknown Item", redir, err)
+            cb(item)
+        
+    this.findUser = (id, next, cb) ->
+        this.findItem db.User, id, '/users', next, cb
 
     this.findChore = (id, next, cb) ->
-        db.Chore.findById id, (err, chore) ->
-            return cb(false) if not next and (err or not chore)
-            if err
-                return next new this.DBError("Can't get Chore", '/chores', err)
-            if not chore
-                return next new this.NotFound("Unknown Chore", '/chores', err)
-            cb(chore)
+        this.findItem db.Chore, id, '/chores', next, cb
 
     this.getLog = (since, userid, choreid, next, cb) ->
         query = db.Log.find({})
