@@ -6,13 +6,11 @@ module.exports = (web, express, settings) ->
     web.use      express.static   __dirname + '/../static'
     web.use      express.bodyParser()
     web.use      express.cookieParser()
-    web.use      express.session {
-        cookie : {
+    web.use      express.session
+        key    : 'ao.sid'
+        cookie :
             maxAge : 60000 * 60 * 24 * 14
             path   : '/'
-        }
         secret : settings.sessionsecret,
-        store  : new Session({
+        store  : new Session
             dbname : settings.dbname
-        })
-    }

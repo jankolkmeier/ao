@@ -1,4 +1,4 @@
-h1 -> "Database Error"
+h1 -> "Error"
 div class:'error', ->
     "#{@error.msg or 'no message'}"
 if @error?.error

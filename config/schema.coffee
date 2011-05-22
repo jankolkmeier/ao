@@ -5,61 +5,50 @@ module.exports = (settings) ->
     
     orm.connect 'mongodb://localhost/'+settings.dbname
 
-    UserSchema = new Schema {
-        nick  : {
+    UserSchema = new Schema
+        nick  :
             type : String
             unique : true
             required : true
             index : true
-        }
-        name  : {
+        name  :
             type : String
             required : true
-        }
-        mail  : {
+        mail  :
             type : String
             unique : true
             required : true
-        }
-        pass  : {
+        pass  :
             type : String
             required : true
-        }
-    }
 
     orm.model 'User', UserSchema
-    this.User = orm.model('User')
+    this.User = orm.model 'User'
 
 
-    ChoreSchema = new Schema {
-        name  : {
+    ChoreSchema = new Schema
+        name  :
             type : String
             unique : true
-        }
-    }
 
     orm.model 'Chore', ChoreSchema
-    this.Chore = orm.model('Chore')
+    this.Chore = orm.model 'Chore'
 
 
-    LogSchema = new Schema {
-        choreid : {
+    LogSchema = new Schema
+        choreid :
             type : ObjectId
             required : true
-        }
-        userid  : {
+        userid  :
             type : ObjectId
             required : true
-        }
-        date  : {
+        date  :
             type : Date,
             default : Date.now
             required : true
-        }
-    }
 
     orm.model 'Log', LogSchema
-    this.Log = orm.model('Log')
+    this.Log = orm.model 'Log'
 
 
     return this

@@ -13,6 +13,7 @@
     "crypto": ">= 0.0.1",
     "connect-mongodb": ">= 0.3.0",
     "mongoose": ">= 1.3.5",
+    "async": ">= 0.1.9",
   },
   "keywords": ["office", "serious", "game", "webapp", "backend"],
   "repository": "git://github.com/jouz/ao",

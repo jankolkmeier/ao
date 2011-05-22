@@ -1,5 +1,13 @@
 h1 -> "Welcome"
-p -> "User: #{@user?.name or '--'}"
+div -> 
+    if @user
+        span "User: #{@user.name} "
+        a href:'/logout', -> "Logout"
+    else
+        span ->
+            a href:'/login', -> "Login"
+            span " "
+            a href:'/register', -> "Register"
 a href:'/chores', ->
     span -> 'Chores'
 span -> " "
@@ -12,4 +20,3 @@ ul ->
             span -> "#{log.user.name}"
             span -> " did "
             span -> "#{log.chore.name}"
-

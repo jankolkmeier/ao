@@ -48,7 +48,7 @@ module.exports = (web, db, h) ->
     web.get '/chores/do/:id', (req, res, next) ->
         if not h.authed(req, res, next) then return
         newLog = new db.Log {
-            userid : req.session.user._id
+            userid  : req.session.user._id
             choreid : req.params.id
         }
         newLog.save (err) ->
