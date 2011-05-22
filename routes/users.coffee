@@ -1,14 +1,14 @@
-module.exports = (web, db, h) ->
+module.exports = (web, db, u) ->
     crypto  = require('crypto')
 
     web.get '/users', (req, res, next) ->
         db.User.find {}, (err, docs) ->
-            return next new h.DBError("Can't get Users", '/users', err) if err
+            return next new u.DBError("Can't get Users", '/users', err) if err
             res.render 'users', context :
                 users : docs
 
     web.get '/user/:id', (req, res, next) ->
-        h.findUser req.params.id, next, (user) ->
+        u.findUser req.params.id, next, (user) ->
             res.render 'user', context :
                 user : user
 
@@ -47,6 +47,6 @@ module.exports = (web, db, h) ->
             if err and err.name == 'ValidationError'
                 return res.render 'register', context :
                     error: err
-            return next new h.DBError("Can't save User", '/chores/new') if err
+            return next new u.DBError("Can't save User", '/chores/new') if err
             req.session.user = newUser
             res.redirect req.query.redirect

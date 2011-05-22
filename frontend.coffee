@@ -1,13 +1,13 @@
 express   = require('express')
 settings  = require('./config/settings.coffee')
 db        = require('./config/schema.coffee')(settings)
-h         = require('./helper.coffee')(db)
 web       = module.exports = express.createServer()
-
 require('./config/environment.coffee')(web, express, settings)
 
-require('./routes/main.coffee')(web, db, h)
-require('./routes/users.coffee')(web, db, h)
-require('./routes/chores.coffee')(web, db, h)
+utils     = require('./utils/index.coffee')(db, ['errors', 'dbhelper'])
+
+require('./routes/main.coffee')(web, db, utils)
+require('./routes/users.coffee')(web, db, utils)
+require('./routes/chores.coffee')(web, db, utils)
 
 web.listen settings.httpPort
