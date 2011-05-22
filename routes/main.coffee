@@ -2,7 +2,6 @@ module.exports = (web, db, h) ->
 
     web.get '/', (req, res, next) ->
         h.getLog 0, false, false, next, (logs) ->
-            console.log req.session.user
             res.render 'index', context :
                 user : req.session.user
                 logs : logs

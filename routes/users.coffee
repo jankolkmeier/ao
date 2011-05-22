@@ -19,13 +19,14 @@ module.exports = (web, db, h) ->
     web.post '/login', (req, res) ->
         pass = crypto.createHash('md5').update(req.body.pass).digest('hex')
         db.User.find 
-            nick : req.body.nick
-            pass : pass
+            'nick' : req.body.nick
+            'pass' : pass
             (err, docs) ->
                 if docs.length == 1
                     req.session.user = docs[0]
-                    console.log docs[0].name+" logged in"
-            res.redirect req.query.redirect
+                    res.redirect req.query.redirect
+                else
+                    res.redirect '/login?redirect='+req.query.redirect
 
     web.get '/logout', (req, res) ->
         delete req.session.user
