@@ -6,19 +6,19 @@ module.exports = (settings) ->
     orm.connect 'mongodb://localhost/'+settings.dbname
 
     UserSchema = new Schema
-        nick  :
+        nick :
             type : String
             unique : true
             required : true
             index : true
-        name  :
+        name :
             type : String
             required : true
-        mail  :
+        mail :
             type : String
             unique : true
             required : true
-        pass  :
+        pass :
             type : String
             required : true
 
@@ -27,9 +27,17 @@ module.exports = (settings) ->
 
 
     ChoreSchema = new Schema
-        name  :
+        name :
             type : String
             unique : true
+        impact :
+            type : String
+            enum : ['individual', 'group']
+        occurence :
+            type : String
+            enum : ['random', 'fixed', 'onetime']
+        quest :
+            type : String
 
     orm.model 'Chore', ChoreSchema
     this.Chore = orm.model 'Chore'
@@ -39,13 +47,21 @@ module.exports = (settings) ->
         choreid :
             type : ObjectId
             required : true
-        userid  :
+        userid :
             type : ObjectId
             required : true
-        date  :
+        date :
             type : Date,
             default : Date.now
             required : true
+        hedons :
+            type : Number
+            default : 0
+        collectons :
+            type : Number
+            default : 0
+        quest :
+            type : String
 
     orm.model 'Log', LogSchema
     this.Log = orm.model 'Log'

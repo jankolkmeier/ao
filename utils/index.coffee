@@ -1,7 +1,10 @@
 module.exports = (db, load) ->
 
     for module in load
-        require('./'+module+'.coffee')(this, db)
+        # Enable "namespaces" by using this instead:
+        # namespace = this[module] = {}
+        namespace = this
+        require('./'+module+'.coffee')(namespace, db)
     
     # Some general helpers
     this.authed = (req, res) ->

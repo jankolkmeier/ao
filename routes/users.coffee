@@ -18,7 +18,7 @@ module.exports = (web, db, u) ->
 
     web.post '/login', (req, res) ->
         pass = crypto.createHash('md5').update(req.body.pass).digest('hex')
-        db.User.find 
+        db.User.find
             'nick' : req.body.nick
             'pass' : pass
             (err, docs) ->

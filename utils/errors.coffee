@@ -16,3 +16,12 @@ module.exports = (u, db) ->
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
     u.DBError.prototype.__proto__ = Error.prototype
+    
+    u.PayoffError = (msg, redirect, err) ->
+        this.name = 'PayoffError'
+        this.msg = msg
+        this.redirect = redirect
+        this.error = err
+        Error.call this, msg
+        Error.captureStackTrace this, arguments.callee
+    u.DBError.prototype.__proto__ = Error.prototype

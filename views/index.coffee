@@ -1,5 +1,5 @@
 h1 -> "Welcome"
-div -> 
+div ->
     if @user
         span "User: #{@user.name} "
         a href:'/logout', class:'small', -> "Logout"
@@ -16,6 +16,11 @@ h2 -> "Logs"
 ul ->
     for log in @logs
         li ->
-            span -> "#{log.user.name}"
-            span -> " did "
-            span -> "#{log.chore.name}"
+            span class:'user', -> "#{log.user.name}"
+            span " did "
+            span class:'chore', -> "#{log.chore.name}"
+            span " for "
+            span class:'hedon', -> "#{log.log?.hedons}"
+            span " Hedons and "
+            span class:'collecton', -> "#{log.log?.collectons}"
+            span " Collectons"

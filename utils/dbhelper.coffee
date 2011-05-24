@@ -3,6 +3,9 @@ module.exports = (u, db) ->
     async = require 'async'
 
     u.findItem = (model, id, redir, next, cb) ->
+        # Hack-ish - if passed thing is already an object...
+        if id.name
+            return cb(id)
         model.findById id, (err, item) ->
             return cb(false) if not next and (err or not item)
             if err
