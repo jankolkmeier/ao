@@ -3,7 +3,7 @@ settings  = require('./config/settings.coffee')
 db        = require('./config/schema.coffee')(settings)
 web       = module.exports = express.createServer()
 require('./config/environment.coffee')(web, express, settings)
-# as asd
+
 utils     = require('./utils/index.coffee')(db, [
         'errors'
         'dbhelper'

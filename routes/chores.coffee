@@ -63,6 +63,7 @@ module.exports = (web, db, u) ->
                 quest : quest
                 hedons : hedons
                 collectons : collectons
+                scenarioVersion : u.getScenarioVersion()
             }
             newLog.save (err) ->
                 return next new u.DBError("Can't Log this", '/chore/'+req.params.id, err) if err

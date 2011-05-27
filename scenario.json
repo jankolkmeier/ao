@@ -1,0 +1,22 @@
+{
+    'scenario' : {
+        'name' : "Space",
+        'version' : 1306435020,
+        'individual_conflict_scenes' : ['deckFight', '...'],
+        'individual_scenes' : ['doFitness', '...'],
+        'individual_attributes' : ['health', '...'],
+        'group_scenes' : ['conquerPlanet', '...'],
+        'group_conflict_scenes' : ['pirateAttack', '...'],
+        'group_attributes' : ['shipSize', '...']
+    }
+}
+
+
+random + group : group_scene, group_attribute
+random + individual : individual_scene, individual_attribute
+
+fixed + group : group_scene, group_conflict_scene, group_attribute
+fixed + individual : individual_scene, individual_conflict_scene, individual_attribute
+
+once + group : group_conflict_scene, group_attribute
+once + individual : individual_conflict_scene, individual_attribute

@@ -30,6 +30,8 @@ module.exports = (settings) ->
         name :
             type : String
             unique : true
+        desc :
+            type : String
         impact :
             type : String
             enum : ['individual', 'group']
@@ -62,6 +64,8 @@ module.exports = (settings) ->
             default : 0
         quest :
             type : String
+        scenarioVersion :
+            type : Number
 
     orm.model 'Log', LogSchema
     this.Log = orm.model 'Log'
