@@ -1,22 +1,42 @@
 {
-    'scenario' : {
-        'name' : "Space",
-        'version' : 1306435020,
-        'individual_conflict_scenes' : ['deckFight', '...'],
-        'individual_scenes' : ['doFitness', '...'],
-        'individual_attributes' : ['health', '...'],
-        'group_scenes' : ['conquerPlanet', '...'],
-        'group_conflict_scenes' : ['pirateAttack', '...'],
-        'group_attributes' : ['shipSize', '...']
+    "scenario": {
+        "name": "Space",
+        "scene_items": ["cup", "washing_machine", "server", "pirate"]
+        "individual_progress": {
+            "DoFitness": {
+                "attribute": "health", 
+                "desc": "Get your character to do some Fitness"
+            },
+            "LearnMath": {
+                "attribute": "intelligence",
+                "desc": "Get your character to learn some Math"
+            }
+        },
+        "individual_conflict": {
+            "Sickness": {
+                "params": {
+                    "attackingItem" : {
+                        type : "scene_items"
+                        desc : "Attacking Thing"
+                    }
+                }
+            }
+        },
+        "group_progress": {
+            "ConquerPlanet": {
+                "attribute": "worldSize", 
+                "desc": "Help increasing the size of your groups World!"
+            }
+        },
+        "group_conflict": {
+            "EnemyAttack": {
+                "params": {
+                    "attackingItem": {
+                        type : "scene_items"
+                        desc : "Attacking Enemy"
+                    }
+                }
+            }
+        }
     }
 }
-
-
-random + group : group_scene, group_attribute
-random + individual : individual_scene, individual_attribute
-
-fixed + group : group_scene, group_conflict_scene, group_attribute
-fixed + individual : individual_scene, individual_conflict_scene, individual_attribute
-
-once + group : group_conflict_scene, group_attribute
-once + individual : individual_conflict_scene, individual_attribute
