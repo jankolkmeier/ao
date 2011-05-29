@@ -14,5 +14,6 @@ utils     = require('./utils/index.coffee')(db, [
 require('./routes/main.coffee')(web, db, utils)
 require('./routes/users.coffee')(web, db, utils)
 require('./routes/chores.coffee')(web, db, utils)
+require('./routes/groups.coffee')(web, db, utils)
 
 web.listen settings.httpPort

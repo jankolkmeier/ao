@@ -20,6 +20,9 @@ module.exports = (u, db) ->
     u.findChore = (id, next, cb) ->
         u.findItem db.Chore, id, '/chores', next, cb
 
+    u.findGroup = (id, next, cb) ->
+        u.findItem db.Group, id, '/groups', next, cb
+
     u.getLog = (since, userid, choreid, next, cb) ->
         query = db.Log.find({})
         if userid
