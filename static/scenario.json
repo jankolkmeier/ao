@@ -1,7 +1,7 @@
 {
     "scenario": {
         "name": "Space",
-        "scene_items": ["cup", "washing_machine", "server", "pirate"]
+        "scene_items": ["cup", "washing_machine", "server", "pirate"],
         "individual_progress": {
             "DoFitness": {
                 "attribute": "health", 
@@ -16,8 +16,8 @@
             "Sickness": {
                 "params": {
                     "attackingItem" : {
-                        type : "scene_items"
-                        desc : "Attacking Thing"
+                        "type" : "scene_items",
+                        "desc" : "Attacking Thing"
                     }
                 }
             }
@@ -32,8 +32,8 @@
             "EnemyAttack": {
                 "params": {
                     "attackingItem": {
-                        type : "scene_items"
-                        desc : "Attacking Enemy"
+                        "type" : "scene_items",
+                        "desc" : "Attacking Enemy"
                     }
                 }
             }

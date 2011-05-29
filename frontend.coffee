@@ -4,7 +4,7 @@ db        = require('./config/schema.coffee')(settings)
 web       = module.exports = express.createServer()
 require('./config/environment.coffee')(web, express, settings)
 
-utils     = require('./utils/index.coffee')(db, [
+utils     = require('./utils/index.coffee')(db, settings, [
         'errors'
         'dbhelper'
         'scenarios'
@@ -16,4 +16,4 @@ require('./routes/users.coffee')(web, db, utils)
 require('./routes/chores.coffee')(web, db, utils)
 require('./routes/groups.coffee')(web, db, utils)
 
-web.listen settings.httpPort
+web.listen settings.httpPort, utils.loadScenario
