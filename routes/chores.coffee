@@ -9,15 +9,29 @@ module.exports = (web, db, u) ->
         res.render 'editchore', context:
             quests : u.getQuests()
   
-
-    web.get '/chores/remove/:id', (req, res, next) ->
-        res.redirect '/chore/'+req.params.id
-
     web.post '/chores/remove/:id', (req, res, next) ->
         return if not u.authed(req, res)
         db.Chore.remove { _id : req.params.id }, (err) ->
             return next new u.DBError("Remove Failed", '/chores', err) if err
             res.redirect '/chores'
+
+    web.get '/testparams', (req, res, next) ->
+        chore = new db.Chore()
+        chore.name = "Test Name"
+        chore.impact = "individual"
+        chore.occurence = "random"
+        chore.params = {}
+        chore.params['user'] = 'userid'
+        chore.params['item'] = 'itemname'
+        chore.save (err) ->
+            if err and err.name == 'ValidationError'
+                return res.render 'editchore', context :
+                    error : err,
+                    chore : chore
+                    quests : u.getQuests()
+            if err
+                return next new u.DBError("Can't save Chore", '/chores/new', err)
+            res.redirect '/chore/'+chore.id
 
     web.post '/chores/save', (req, res, next) ->
         return if not u.authed(req, res)
@@ -30,7 +44,7 @@ module.exports = (web, db, u) ->
                 if err and err.name == 'ValidationError'
                     return res.render 'editchore', context :
                         error : err,
-                        chore : newChore
+                        chore : chore
                         quests : u.getQuests()
                 return next new u.DBError("Can't save Chore", '/chores/new', err) if err
                 res.redirect '/chore/'+chore.id

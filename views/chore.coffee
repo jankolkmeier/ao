@@ -9,3 +9,8 @@ a href:"/chores/do/#{@chore.id}", class:'orange', ->
     span 'Do chore'
 div ->
     a href:"/chores", -> "View all chores"
+if @chore.params
+    p "#{@chore.params.item}"
+    p "#{@chore.params.user}"
+else
+    p "No Params"
