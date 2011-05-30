@@ -3,7 +3,7 @@ h2 "Edit/Add Chore"
 form method:'post', action:"/chores/save", ->
     input type:'text', class:'editchore, name', name:'name',
         placeholder:'Chore Name', value:"#{@chore?.name or ''}"
-    for prop,opts of {'impact':['individual','group'], 'occurence':['random','fixed','onetime'] }
+    for prop,opts of { 'occurence':['random','fixed','onetime'], 'impact':['individual','group'] }
         b "Chore #{prop}: "
         for opt in opts
             if @chore and @chore[prop] == opt
@@ -14,13 +14,13 @@ form method:'post', action:"/chores/save", ->
                     value:"#{opt}", unecked:'yes'
             span "#{opt}"
         br ""
-    b "Related Quest: "
-    select name:'quest', ->
-        for quest in @quests
-            if quest == @chore?.quest
-                option value:"#{quest}", checked:'yes', -> "#{quest}"
+    b "Reward: "
+    select name:'progress', ->
+        for name,v of @scenario.individual_progress
+            if name == @chore?.progress
+                option value:"#{name}", checked:'yes', -> "#{v.desc}"
             else
-                option value:"#{quest}", -> "#{quest}"
+                option value:"#{name}", -> "#{v.desc}"
     br ""
     if @chore
         input type:'hidden', name:'id', value:"#{@chore.id}"

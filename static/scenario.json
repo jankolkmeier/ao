@@ -4,16 +4,19 @@
         "scene_items": ["cup", "washing_machine", "server", "pirate"],
         "individual_progress": {
             "DoFitness": {
-                "attribute": "health", 
-                "desc": "Get your character to do some Fitness"
+                "desc": "Get your character to do some Fitness",
+                "params": {},
+                "attribute": "health" 
             },
             "LearnMath": {
-                "attribute": "intelligence",
-                "desc": "Get your character to learn some Math"
+                "desc": "Get your character to learn some Math",
+                "params": {},
+                "attribute": "intelligence"
             }
         },
         "individual_conflict": {
             "Sickness": {
+                "desc": "The character gets plagued by something",
                 "params": {
                     "attackingItem" : {
                         "type" : "scene_items",
@@ -24,12 +27,14 @@
         },
         "group_progress": {
             "ConquerPlanet": {
-                "attribute": "worldSize", 
-                "desc": "Help increasing the size of your groups World!"
+                "desc": "Help increasing the size of your groups World!",
+                "params": {},
+                "attribute": "worldSize" 
             }
         },
         "group_conflict": {
             "EnemyAttack": {
+                "desc": "The character gets plagued by something",
                 "params": {
                     "attackingItem": {
                         "type" : "scene_items",

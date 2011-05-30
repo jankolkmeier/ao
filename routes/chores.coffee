@@ -7,7 +7,7 @@ module.exports = (web, db, u) ->
     web.get '/chores/new', (req, res) ->
         if not u.authed(req, res) then return
         res.render 'editchore', context:
-            quests : u.getQuests()
+            scenario : u.scenario
   
     web.post '/chores/remove/:id', (req, res, next) ->
         return if not u.authed(req, res)
@@ -28,7 +28,7 @@ module.exports = (web, db, u) ->
                 return res.render 'editchore', context :
                     error : err,
                     chore : chore
-                    quests : u.getQuests()
+                    scenario : u.scenario
             if err
                 return next new u.DBError("Can't save Chore", '/chores/new', err)
             res.redirect '/chore/'+chore.id
@@ -45,7 +45,7 @@ module.exports = (web, db, u) ->
                     return res.render 'editchore', context :
                         error : err,
                         chore : chore
-                        quests : u.getQuests()
+                        scenario : u.scenario
                 return next new u.DBError("Can't save Chore", '/chores/new', err) if err
                 res.redirect '/chore/'+chore.id
         if req.body.id
