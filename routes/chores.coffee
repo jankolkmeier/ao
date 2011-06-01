@@ -1,7 +1,6 @@
 module.exports = (web, db, u) ->
     web.get '/chores', (req, res, next) ->
-        db.Chore.find {}, (err, docs) ->
-            return next new u.DBError("Can't get Chores", '/chores', err) if err
+        u.getAll 'chores', (docs) ->
             res.render 'chores', context : { chores : docs }
 
     web.get '/chores/new', (req, res) ->
@@ -11,28 +10,20 @@ module.exports = (web, db, u) ->
   
     web.post '/chores/remove/:id', (req, res, next) ->
         return if not u.authed(req, res)
-        db.Chore.remove { _id : req.params.id }, (err) ->
-            return next new u.DBError("Remove Failed", '/chores', err) if err
+        db.chores.rm req.params.id, () ->
             res.redirect '/chores'
 
     web.post '/chores/save', (req, res, next) ->
         return if not u.authed(req, res)
         cb = (chore) ->
             u.parseChoreBody chore, req.body, (chore) ->
-                chore.save (err) ->
-                    if err and err.name == 'ValidationError'
-                        return res.render 'editchore', context :
-                            error : err,
-                            chore : chore
-                            scenario : u.scenario
-                    return next new u.DBError("Can't save Chore", '/chores/new', err) if err
-                    console.log chore
+                db.chores.set chore.id, chore, () ->
+                    console.log chore.id
                     res.redirect '/chore/'+chore.id
         if req.body.id
             u.findChore req.body.id, next, cb
         else
-            newChore = new db.Chore()
-            cb newChore
+            cb({})
 
     web.get '/chores/edit/:id', (req, res, next) ->
         if not u.authed(req, res) then return

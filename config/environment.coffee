@@ -1,5 +1,5 @@
 module.exports = (web, express, settings) ->
-    Session = require 'connect-mongodb'
+    Session = express.session.MemoryStore
     web.register '.coffee',       require 'coffeekup'
     web.set      'view engine',   'coffee'
     web.set      'views',         __dirname + '/../views'
@@ -12,5 +12,4 @@ module.exports = (web, express, settings) ->
             maxAge : 60000 * 60 * 24 * 14
             path   : '/'
         secret : settings.sessionsecret,
-        store  : new Session
-            dbname : settings.dbname
+        store  : new Session({ reapInterval: 60000 * 10 })

@@ -2,48 +2,50 @@
 module.exports = (u, db) ->
     async = require 'async'
 
-    u.findItem = (model, id, redir, next, cb) ->
+    u.findItem = (type, id, redir, next, cb) ->
         # Hack-ish - if passed thing is already an object...
         if id.name
             return cb(id)
-        model.findById id, (err, item) ->
-            return cb(false) if not next and (err or not item)
-            if err
-                return next new u.DBError("Can't get Item", redir, err)
-            if not item
-                return next new u.NotFound("Unknown Item", redir, err)
-            cb(item)
-        
+        item = db[type].get id
+        if not item
+            return next new u.NotFound("Unknown Item", redir, err)
+        cb item
+    
+    u.getAll = (type, cb) ->
+        res = []
+        cbDone = () ->
+            cb(res)
+        db[type].forEach cbDone, (key, val) ->
+            res.push(val)
+
     u.findUser = (id, next, cb) ->
-        u.findItem db.User, id, '/users', next, cb
+        u.findItem 'users', id, '/users', next, cb
 
     u.findChore = (id, next, cb) ->
-        u.findItem db.Chore, id, '/chores', next, cb
+        u.findItem 'chores', id, '/chores', next, cb
 
     u.findGroup = (id, next, cb) ->
-        u.findItem db.Group, id, '/groups', next, cb
+        u.findItem 'groups', id, '/groups', next, cb
+        
+    u.findLog = (id, next, cb) ->
+        u.findItem 'logs', id, '/logs', next, cb
 
     u.getLog = (since, userid, choreid, next, cb) ->
-        query = db.Log.find({})
-        if userid
-            query.where('userid', userid)
-        if choreid
-            query.where('choreid', userid)
-        query.sort('date', -1)
-        query.exec (err, logs) ->
-            return next new u.DBError("Can't get Log", '/', err) if err
-            loglist = []
-            for log in logs
-                if true # date younger than since
-                   loglist.push({ log: log })  
-                else
-                    break
-            async.forEach loglist, (log, cb) ->
-                u.findUser log.log.userid, false, (user) ->
-                    log.user = user
-                    u.findChore log.log.choreid, false, (chore) ->
-                        log.chore = chore
-                        return cb(not user or not chore)
-            , (err) ->
-                return next new u.DBError("Can't get Details", '/', err) if err
-                cb loglist
+        #if userid
+        #    query.where('userid', userid)
+        #if choreid
+        #    query.where('choreid', userid)
+        #query.sort('date', -1)
+        #query.exec (err, logs) ->
+        loglist = []
+        cbLoop = () ->
+            cb loglist
+        db.logs.forEach cbLoop, (key, val) ->
+            if true # date younger than since
+               loglist.push({
+                   log: val
+                   user: users.get log.userid
+                   chore: users.get log.choreid
+               })
+
+    console.log "loaded dbhelper"

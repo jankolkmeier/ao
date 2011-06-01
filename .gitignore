@@ -4,3 +4,5 @@ desktop.ini
 
 config/settings.coffee
 node_modules
+data
+node-dirty

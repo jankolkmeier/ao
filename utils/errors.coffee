@@ -25,3 +25,5 @@ module.exports = (u, db) ->
         Error.call this, msg
         Error.captureStackTrace this, arguments.callee
     u.DBError.prototype.__proto__ = Error.prototype
+
+    console.log "loaded Errors"

@@ -1,119 +1,14 @@
-module.exports = (settings) ->
-    orm      = require 'mongoose'
-    Schema = orm.Schema
-    ObjectId = orm.Schema.ObjectId
-    
-    orm.connect 'mongodb://localhost/'+settings.dbname
+module.exports = (settings, db) ->
 
-    GroupSchema = new Schema
-        name :
-            type : String
-            required : true
-            
-    orm.model 'Group', GroupSchema
-    this.Group = orm.model 'Group'
+    this.users = db 'data/users.db'
+    this.groups = db 'data/groups.db'
+    this.chores = db 'data/chores.db'
+    this.logs = db 'data/logs.db'
 
-    UserSchema = new Schema
-        nick :
-            type : String
-            unique : true
-            required : true
-            index : true
-        name :
-            type : String
-            required : true
-        mail :
-            type : String
-            unique : true
-            required : true
-        pass :
-            type : String
-            required : true
-        group :
-            type : ObjectId
+    this.genKey = () ->
+        return (0x2000000000 * Math.random() + (Date.now() & 0x1f)).toString(32)
 
-    orm.model 'User', UserSchema
-    this.User = orm.model 'User'
-
-    Param = new Schema
-        name  : String
-        value : String
-
-    ChoreSchema = new Schema
-        name :
-            type : String
-            unique : true
-        desc :
-            type : String
-        impact :
-            type : String
-            enum : ['individual', 'group']
-        occurence :
-            type : String
-            enum : ['random', 'fixed', 'once']
-        progress :
-            type : String
-        conflict :
-            type : String
-        progress_params : [Param]
-        conflict_params : [Param]
-        group :
-            type : ObjectId
-
-    orm.model 'Chore', ChoreSchema
-    this.Chore = orm.model 'Chore'
-
-    ConflictSchema = new Schema
-        choreid :
-            type : ObjectId
-        group :
-            type : ObjectId
-        conflict :
-            type : String
-        start :
-            type : Date,
-            required : true
-        end :
-            type : Date,
-            required : true
-        params : [Param]
-
-    orm.model 'Conflict', ConflictSchema
-    this.Conflict = orm.model 'Conflict'
-
-    LogSchema = new Schema
-        event :
-            type : String
-            enum : [
-                'progress'          # H, C, user, chore, group
-                'conflict_start'    # conflict, chore, group | user
-                'conflict_solved'   # H, C, conflict, chore, user, group 
-                'conflict_unsolved' # H, C, conflict, group
-            ]
-        groupid :
-            type : ObjectId
-            required : true
-        date :
-            type : Date,
-            default : Date.now
-            required : true
-        userid :
-            type : ObjectId
-        choreid :
-            type : ObjectId
-        conflictid :
-            type : ObjectId
-        hedons :
-            type : Number
-            default : 0
-        collectons :
-            type : Number
-            default : 0
-
-    orm.model 'Log', LogSchema
-    this.Log = orm.model 'Log'
-
-
+    console.log "loaded Schema"
     return this
 
 # Validator stuff:

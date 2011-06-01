@@ -12,3 +12,4 @@ module.exports = (u, db) ->
                     u._getPayoff _user, _chore, cb
                 else
                     cb true
+    console.log "loaded Payoff"

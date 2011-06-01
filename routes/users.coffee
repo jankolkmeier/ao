@@ -2,10 +2,9 @@ module.exports = (web, db, u) ->
     crypto  = require('crypto')
 
     web.get '/users', (req, res, next) ->
-        db.User.find {}, (err, docs) ->
-            return next new u.DBError("Can't get Users", '/users', err) if err
+        u.getAll 'users', (users) ->
             res.render 'users', context :
-                users : docs
+                users : users
 
     web.get '/user/:id', (req, res, next) ->
         u.findUser req.params.id, next, (user) ->
@@ -18,15 +17,13 @@ module.exports = (web, db, u) ->
 
     web.post '/login', (req, res) ->
         pass = crypto.createHash('md5').update(req.body.pass).digest('hex')
-        db.User.find
-            'nick' : req.body.nick
-            'pass' : pass
-            (err, docs) ->
-                if docs.length == 1
-                    req.session.user = docs[0]
-                    res.redirect req.query.redirect
-                else
-                    res.redirect '/login?redirect='+req.query.redirect
+        cb = () ->
+            if not req.session.user
+                res.redirect '/login?redirect='+req.query.redirect
+        db.users.forEach cb, (key, user) ->
+            if user.nick == req.body.nick and user.pass == pass
+                req.session.user = user
+                res.redirect req.query.redirect
 
     web.get '/logout', (req, res) ->
         delete req.session.user
@@ -38,15 +35,17 @@ module.exports = (web, db, u) ->
 
     web.post '/register', (req, res, next) ->
         pass = crypto.createHash('md5').update(req.body.pass).digest('hex')
-        newUser = new db.User
+        newUser =
             name  : req.body.name
             nick  : req.body.nick
             pass  : pass
             mail  : req.body.mail
-        newUser.save (err) ->
+            id    : db.genKey()
+        db.users.set newUser.id, newUser, (err) ->
             if err and err.name == 'ValidationError'
                 return res.render 'register', context :
                     error: err
             return next new u.DBError("Can't save User", '/chores/new') if err
             req.session.user = newUser
+            console.log(newUser)
             res.redirect req.query.redirect

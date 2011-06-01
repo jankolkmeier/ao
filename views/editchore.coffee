@@ -29,7 +29,7 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
                     value:"#{opt}", checked:'yes'
             else
                 input type:'radio', class:"editchore #{prop}", name:"#{prop}",
-                    value:"#{opt}", unecked:'yes'
+                    value:"#{opt}", unchecked:'yes'
             span "#{opt}"
         br ""
     for impact,types of @scenario.scenes
@@ -39,7 +39,7 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
                 select name:"#{impact}_#{type}", class:"sceneselect #{type}", ->
                     for name,scene of scenes
                         if name == @chore?[type]
-                            option value:"#{name}", checked:'yes', -> "#{scene.desc}"
+                            option value:"#{name}", selected:'yes', -> "#{scene.desc}"
                         else
                             option value:"#{name}", -> "#{scene.desc}"
                 for name,scene of scenes
@@ -51,10 +51,10 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
                                     checked = false
                                     if @chore
                                         for p in @chore["#{type}_params"]
-                                            if p.name == name and p.value == item
+                                            if p.name == id and p.value == item
                                                 checked = true
                                     if checked
-                                        option value:"#{item}", checked:'yes', -> "#{item}"
+                                        option value:"#{item}", selected:'yes', -> "#{item}"
                                     else
                                         option value:"#{item}", -> "#{item}"
 
@@ -73,9 +73,10 @@ else
 
 coffeescript ->
     $(document).ready () ->
-        impact = occurence = conflict = progress = ""
-        impact = $("input[name='impact']").val()
-        occurence = $("input[name='occurence']").val()
+        impact = $("input[name='impact']:checked").val()
+        occurence = $("input[name='occurence']:checked").val()
+        conflict = ""
+        progress = ""
         updateVals = () ->
             progress = $("select[name='"+impact+"_progress']").val()
             conflict = $("select[name='"+impact+"_conflict']").val()
