@@ -30,8 +30,10 @@ module.exports = (web, db, u) ->
         res.redirect req.query.redirect or '/'
 
     web.get '/register', (req, res) ->
-        res.render 'register', context:
-            redirect: req.query.redirect
+        u.getAll 'groups', (groups) ->
+            res.render 'register', context:
+                redirect: req.query.redirect
+                groups: groups
 
     web.post '/register', (req, res, next) ->
         pass = crypto.createHash('md5').update(req.body.pass).digest('hex')
@@ -41,11 +43,8 @@ module.exports = (web, db, u) ->
             pass  : pass
             mail  : req.body.mail
             id    : db.genKey()
+            groupid : req.body.groupid
         db.users.set newUser.id, newUser, (err) ->
-            if err and err.name == 'ValidationError'
-                return res.render 'register', context :
-                    error: err
-            return next new u.DBError("Can't save User", '/chores/new') if err
             req.session.user = newUser
             console.log(newUser)
             res.redirect req.query.redirect

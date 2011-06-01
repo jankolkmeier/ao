@@ -18,7 +18,6 @@ module.exports = (web, db, u) ->
         cb = (chore) ->
             u.parseChoreBody chore, req.body, (chore) ->
                 db.chores.set chore.id, chore, () ->
-                    console.log chore.id
                     res.redirect '/chore/'+chore.id
         if req.body.id
             u.findChore req.body.id, next, cb

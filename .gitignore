@@ -6,3 +6,5 @@ config/settings.coffee
 node_modules
 data
 node-dirty
+connect-dirty
+sessions.db

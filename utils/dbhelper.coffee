@@ -16,7 +16,8 @@ module.exports = (u, db) ->
         cbDone = () ->
             cb(res)
         db[type].forEach cbDone, (key, val) ->
-            res.push(val)
+            if val
+                res.push(val)
 
     u.findUser = (id, next, cb) ->
         u.findItem 'users', id, '/users', next, cb

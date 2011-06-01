@@ -2,8 +2,7 @@ module.exports = (web, db, u) ->
     crypto  = require('crypto')
 
     web.get '/groups', (req, res, next) ->
-        db.Group.find {}, (err, docs) ->
-            return next new u.DBError("Can't get Groups", '/groups', err) if err
+        u.getAll 'groups', (docs) ->
             res.render 'groups', context :
                 groups : docs
 
@@ -25,18 +24,14 @@ module.exports = (web, db, u) ->
         return if not u.authed(req, res)
         cb = (group) ->
             group.name = req.body.name
-            group.save (err) ->
-                if err and err.name == 'ValidationError'
-                    return res.render 'editgroup', context :
-                        error : err,
-                        group : group
-                return next new u.DBError("Can't save Group", '/groups/new', err) if err
+            if not group.id
+                group.id = db.genKey()
+            db.groups.set group.id, group, () ->
                 res.redirect '/group/'+group.id
         if req.body.id
             u.findGroup req.body.id, next, cb
         else
-            newGroup = new db.Group()
-            cb newGroup
+            cb {}
 
     web.get '/groups/edit/:id', (req, res, next) ->
         if not u.authed(req, res) then return

@@ -1,7 +1,7 @@
 express   = require('express')
 settings  = require('./config/settings.coffee')
-nstore        = require('./node-dirty/lib/dirty/index.js')
-db        = require('./config/schema.coffee')(settings, nstore)
+dirty     = require('./node-dirty/lib/dirty/index.js')
+db        = require('./config/schema.coffee')(settings, dirty)
 web       = module.exports = express.createServer()
 require('./config/environment.coffee')(web, express, settings)
 
