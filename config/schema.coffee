@@ -36,7 +36,7 @@ module.exports = (settings) ->
     this.User = orm.model 'User'
 
     Param = new Schema
-        name : String
+        name  : String
         value : String
 
     ChoreSchema = new Schema
@@ -50,14 +50,15 @@ module.exports = (settings) ->
             enum : ['individual', 'group']
         occurence :
             type : String
-            enum : ['random', 'fixed', 'onetime']
-        group :
-            type : ObjectId
+            enum : ['random', 'fixed', 'once']
         progress :
             type : String
         conflict :
             type : String
-        params : [Param]
+        progress_params : [Param]
+        conflict_params : [Param]
+        group :
+            type : ObjectId
 
     orm.model 'Chore', ChoreSchema
     this.Chore = orm.model 'Chore'
@@ -84,9 +85,9 @@ module.exports = (settings) ->
         event :
             type : String
             enum : [
-                'progress' # H, C, user, chore, group
-                'conflict_start' # conflict, chore, group
-                'conflict_solved' # H, C, conflict, chore, user, group 
+                'progress'          # H, C, user, chore, group
+                'conflict_start'    # conflict, chore, group | user
+                'conflict_solved'   # H, C, conflict, chore, user, group 
                 'conflict_unsolved' # H, C, conflict, group
             ]
         groupid :

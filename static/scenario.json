@@ -2,43 +2,68 @@
     "scenario": {
         "name": "Space",
         "scene_items": ["cup", "washing_machine", "server", "pirate"],
-        "individual_progress": {
-            "DoFitness": {
-                "desc": "Get your character to do some Fitness",
-                "params": {},
-                "attribute": "health" 
-            },
-            "LearnMath": {
-                "desc": "Get your character to learn some Math",
-                "params": {},
-                "attribute": "intelligence"
-            }
-        },
-        "individual_conflict": {
-            "Sickness": {
-                "desc": "The character gets plagued by something",
-                "params": {
-                    "attackingItem" : {
-                        "type" : "scene_items",
-                        "desc" : "Attacking Thing"
+        "intervals": ["5", "10", "30"],
+        "scenes": {
+            "individual": {
+                "progress": {
+                    "DoFitness": {
+                        "desc": "Get your character to do some Fitness",
+                        "params": {
+                            "trainingItem": {
+                                "type": "scene_items",
+                                "desc": "Train With"
+                            },
+                            "trainingDuration": {
+                                "type": "intervals",
+                                "desc": "How long"
+                            }
+                        },
+                        "attribute": "health" 
+                    },
+                    "LearnMath": {
+                        "desc": "Get your character to learn some Math",
+                        "params": {},
+                        "attribute": "intelligence"
+                    }
+                },
+                "conflict": {
+                    "Sickness": {
+                        "desc": "The character gets plagued by something",
+                        "params": {
+                            "attackingItem" : {
+                                "type" : "scene_items",
+                                "desc" : "Attacking Thing"
+                            }
+                        }
+                    },
+                    "Argue": {
+                        "desc": "The character has an argument with a thing",
+                        "params": {
+                            "arguingWith" : {
+                                "type" : "scene_items",
+                                "desc" : "Arguing with"
+                            }
+                        }
                     }
                 }
-            }
-        },
-        "group_progress": {
-            "ConquerPlanet": {
-                "desc": "Help increasing the size of your groups World!",
-                "params": {},
-                "attribute": "worldSize" 
-            }
-        },
-        "group_conflict": {
-            "EnemyAttack": {
-                "desc": "The character gets plagued by something",
-                "params": {
-                    "attackingItem": {
-                        "type" : "scene_items",
-                        "desc" : "Attacking Enemy"
+            },
+            "group": {
+                "progress": {
+                    "ConquerPlanet": {
+                        "desc": "Help increasing the size of your groups World!",
+                        "params": {},
+                        "attribute": "worldSize" 
+                    }
+                },
+                "conflict": {
+                    "EnemyAttack": {
+                        "desc": "The ship gets attacked by something",
+                        "params": {
+                            "attackingItem": {
+                                "type" : "scene_items",
+                                "desc" : "Attacking Enemy"
+                            }
+                        }
                     }
                 }
             }

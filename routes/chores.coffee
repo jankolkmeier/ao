@@ -15,39 +15,19 @@ module.exports = (web, db, u) ->
             return next new u.DBError("Remove Failed", '/chores', err) if err
             res.redirect '/chores'
 
-    web.get '/testparams', (req, res, next) ->
-        chore = new db.Chore()
-        chore.name = "Test Name"
-        chore.impact = "individual"
-        chore.occurence = "random"
-        chore.params = {}
-        chore.params['user'] = 'userid'
-        chore.params['item'] = 'itemname'
-        chore.save (err) ->
-            if err and err.name == 'ValidationError'
-                return res.render 'editchore', context :
-                    error : err,
-                    chore : chore
-                    scenario : u.scenario
-            if err
-                return next new u.DBError("Can't save Chore", '/chores/new', err)
-            res.redirect '/chore/'+chore.id
-
     web.post '/chores/save', (req, res, next) ->
         return if not u.authed(req, res)
         cb = (chore) ->
-            chore.name = req.body.name
-            chore.impact = req.body.impact
-            chore.occurence = req.body.occurence
-            chore.quest = req.body.quest
-            chore.save (err) ->
-                if err and err.name == 'ValidationError'
-                    return res.render 'editchore', context :
-                        error : err,
-                        chore : chore
-                        scenario : u.scenario
-                return next new u.DBError("Can't save Chore", '/chores/new', err) if err
-                res.redirect '/chore/'+chore.id
+            u.parseChoreBody chore, req.body, (chore) ->
+                chore.save (err) ->
+                    if err and err.name == 'ValidationError'
+                        return res.render 'editchore', context :
+                            error : err,
+                            chore : chore
+                            scenario : u.scenario
+                    return next new u.DBError("Can't save Chore", '/chores/new', err) if err
+                    console.log chore
+                    res.redirect '/chore/'+chore.id
         if req.body.id
             u.findChore req.body.id, next, cb
         else
@@ -59,11 +39,13 @@ module.exports = (web, db, u) ->
         u.findChore req.params.id, next, (chore) ->
             res.render 'editchore', context :
                 chore : chore
-                quests : u.getQuests()
+                scenario : u.scenario
 
     web.get '/chore/:id', (req, res, next) ->
         u.findChore req.params.id, next, (chore) ->
-            res.render 'chore', context : { chore : chore }
+            res.render 'chore', context :
+                chore : chore
+                scenario : u.scenario
 
     web.get '/chores/do/:id', (req, res, next) ->
         if not u.authed(req, res, next) then return
