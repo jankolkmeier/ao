@@ -1,5 +1,6 @@
 module.exports = (web, express, settings) ->
-    Session = express.session.MemoryStore
+    #Session = express.session.MemoryStore
+    Session = require('../connect-dirty/index.js')
     web.register '.coffee',       require 'coffeekup'
     web.set      'view engine',   'coffee'
     web.set      'views',         __dirname + '/../views'
@@ -12,4 +13,4 @@ module.exports = (web, express, settings) ->
             maxAge : 60000 * 60 * 24 * 14
             path   : '/'
         secret : settings.sessionsecret,
-        store  : new Session({ reapInterval: 60000 * 10 })
+        store  : new Session()
