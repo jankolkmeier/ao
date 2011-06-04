@@ -30,6 +30,9 @@ module.exports = (u, db) ->
         
     u.findLog = (id, next, cb) ->
         u.findItem 'logs', id, '/logs', next, cb
+        
+    u.findConflict = (id, next, cb) ->
+        u.findItem 'conflicts', id, '/logs', next, cb
 
     u.getLog = (since, userid, choreid, next, cb) ->
         #if userid
@@ -45,8 +48,8 @@ module.exports = (u, db) ->
             if true # date younger than since
                loglist.push({
                    log: val
-                   user: users.get log.userid
-                   chore: users.get log.choreid
+                   user: db.users.get val.userid
+                   chore: db.chores.get val.choreid
                })
 
     console.log "loaded dbhelper"

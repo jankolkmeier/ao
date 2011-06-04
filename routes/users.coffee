@@ -11,6 +11,10 @@ module.exports = (web, db, u) ->
             res.render 'user', context :
                 user : user
 
+    web.get '/api/user/:id', (req, res, next) ->
+        u.findUser req.params.id, next, (user) ->
+            res.send { user: user }
+
     web.get '/login', (req, res) ->
         res.render 'login', context:
             redirect: req.query.redirect

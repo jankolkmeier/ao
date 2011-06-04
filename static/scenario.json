@@ -1,35 +1,33 @@
 {
     "scenario": {
         "name": "Space",
-        "scene_items": ["cup", "washing_machine", "server", "pirate"],
-        "intervals": ["5", "10", "30"],
+        "parameters": {
+            "scene_items": ["cup", "washing_machine", "server", "pirate"],
+            "intervals": ["5", "10", "30"]
+        },
         "scenes": {
             "individual": {
                 "progress": {
-                    "DoFitness": {
-                        "desc": "Get your character to do some Fitness",
-                        "params": {
+                    "UpgradeShip": {
+                        "desc": "Upgrade your Ship",
+                        "parameters": {
                             "trainingItem": {
                                 "type": "scene_items",
                                 "desc": "Train With"
-                            },
-                            "trainingDuration": {
-                                "type": "intervals",
-                                "desc": "How long"
                             }
                         },
-                        "attribute": "health" 
+                        "attribute": "shipsize" 
                     },
                     "LearnMath": {
                         "desc": "Get your character to learn some Math",
-                        "params": {},
+                        "parameters": {},
                         "attribute": "intelligence"
                     }
                 },
                 "conflict": {
                     "Sickness": {
                         "desc": "The character gets plagued by something",
-                        "params": {
+                        "parameters": {
                             "attackingItem" : {
                                 "type" : "scene_items",
                                 "desc" : "Attacking Thing"
@@ -38,7 +36,7 @@
                     },
                     "Argue": {
                         "desc": "The character has an argument with a thing",
-                        "params": {
+                        "parameters": {
                             "arguingWith" : {
                                 "type" : "scene_items",
                                 "desc" : "Arguing with"
@@ -51,14 +49,14 @@
                 "progress": {
                     "ConquerPlanet": {
                         "desc": "Help increasing the size of your groups World!",
-                        "params": {},
+                        "parameters": {},
                         "attribute": "worldSize" 
                     }
                 },
                 "conflict": {
                     "EnemyAttack": {
                         "desc": "The ship gets attacked by something",
-                        "params": {
+                        "parameters": {
                             "attackingItem": {
                                 "type" : "scene_items",
                                 "desc" : "Attacking Enemy"

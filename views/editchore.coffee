@@ -43,14 +43,14 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
                         else
                             option value:"#{name}", -> "#{scene.desc}"
                 for name,scene of scenes
-                    div class:"#{type} #{name} params", ->
-                        for id,param of scene.params
+                    div class:"#{type} #{name} parameters", ->
+                        for id,param of scene.parameters
                             b "#{param.desc}: "
                             select name:"#{type}_#{name}_#{id}", class:"#{name} #{id}", ->
-                                for item in @scenario[param.type]
+                                for item in @scenario.parameters[param.type]
                                     checked = false
                                     if @chore
-                                        for p in @chore["#{type}_params"]
+                                        for p in @chore["#{type}_parameters"]
                                             if p.name == id and p.value == item
                                                 checked = true
                                     if checked
@@ -85,12 +85,12 @@ coffeescript ->
             updateVals()
             $(".scene").hide 0
             $("."+impact).show 10
-            updateProgressParams()
+            updateProgressparameters()
 
-        updateProgressParams = () ->
+        updateProgressparameters = () ->
             updateVals()
-            $(".params.conflict").hide 0
-            $(".params.progress").hide 0
+            $(".parameters.conflict").hide 0
+            $(".parameters.progress").hide 0
             $("."+conflict).show 10
             $("."+progress).show 10
 
@@ -103,7 +103,7 @@ coffeescript ->
             updateScenes()
 
         $("select.sceneselect").change () ->
-            updateProgressParams()
+            updateProgressparameters()
 
         updateVals()
         updateScenes()

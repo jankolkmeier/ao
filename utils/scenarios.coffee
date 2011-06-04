@@ -15,8 +15,6 @@ module.exports = (u, db, settings) ->
             cb(not success) if cb
 
     u.parseChoreBody = (chore, body, cb) ->
-        if not chore.id
-            chore.id = db.genKey()
         for attr in ['name', 'desc', 'impact', 'occurence', 'progress', 'conflict']
             if attr == 'progress' or attr == 'conflict'
                 chore[attr] = body[chore.impact+'_'+attr]
@@ -24,12 +22,32 @@ module.exports = (u, db, settings) ->
                 chore[attr] = body[attr]
             #console.log attr+" <- "+chore[attr]
         for type in ['progress', 'conflict']
-            chore[type+'_params'] = []
-            for name,param of u.scenario.scenes[chore.impact][type][chore[type]].params
+            chore[type+'_parameters'] = []
+            for name,param of u.scenario.scenes[chore.impact][type][chore[type]].parameters
                 paramid = type+"_"+chore[type]+"_"+name
                 value = body[paramid]
-                chore[type+'_params'].push {
+                chore[type+'_parameters'].push
                     name : name
                     value : value
-                }
-        cb(chore)
+        cb chore
+        
+    u.parseConflictBody = (body, cb) ->
+        chore = db.chores.get(body.id)
+        conflict = {}
+        conflict.choreid = chore.id
+        conflict.impact = chore.impact
+        if conflict.impact == "individual"
+            conflict.userid = body.userid
+        conflict.scene = body.conflict
+        conflict.parameters = []
+        conflict.start = Date.now()
+        conflict.end = Date.now()+1000*parseInt(body.time)
+        conflict.groupid = chore.groupid
+        conflict.desc = u.scenario.scenes[chore.impact].conflict[conflict.scene].desc
+        for name,param of u.scenario.scenes[chore.impact].conflict[conflict.scene].parameters
+            paramid = "conflict_"+conflict.scene+"_"+name
+            value = body[paramid]
+            conflict.parameters.push
+                name : name
+                value : value
+        cb conflict

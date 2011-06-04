@@ -17,6 +17,9 @@ module.exports = (web, db, u) ->
         return if not u.authed(req, res)
         cb = (chore) ->
             u.parseChoreBody chore, req.body, (chore) ->
+                if not chore.id
+                    chore.id = db.genKey()
+                chore.groupid = req.session.user.groupid
                 db.chores.set chore.id, chore, () ->
                     res.redirect '/chore/'+chore.id
         if req.body.id
@@ -39,18 +42,58 @@ module.exports = (web, db, u) ->
 
     web.get '/chores/do/:id', (req, res, next) ->
         if not u.authed(req, res, next) then return
-        u.getPayoff req.session.user, req.params.id, (err, hedons, collectons, quest) ->
+        u.getPayoff req.session.user, req.params.id, (err, hedons, collectons, chore) ->
             if err
                 return next new u.PayoffError "Can't Calculate Payoff",
                     '/chore/'+req.params.id, err
-            newLog = new db.Log {
-                userid : req.session.user._id
+            newLog =
+                eventtype : 'progress'
+                userid : req.session.user.id
                 choreid : req.params.id
-                quest : quest
+                groupid : req.session.user.groupid
+                impact : chore.impact
                 hedons : hedons
                 collectons : collectons
-                scenarioVersion : u.getScenarioVersion()
-            }
-            newLog.save (err) ->
-                return next new u.DBError("Can't Log this", '/chore/'+req.params.id, err) if err
-            res.redirect '/'
+                date : Date.now()
+                id : db.genKey()
+                scene : chore.progress
+                parameters : chore['progress_parameters']
+            db.logs.set newLog.id, newLog, () ->
+                res.redirect '/'
+
+    web.get '/api/conflict/:id', (req, res, next) ->
+        u.findConflict req.params.id, next, (conflict) ->
+            res.send { conflict: conflict }
+
+    web.get '/chores/conflict/:id', (req, res, next) ->
+        return if not u.authed(req, res)
+        u.findChore req.params.id, next, (chore) ->
+            # TODO: ONLY GROUPID USERS!!!
+            u.getAll 'users', (users) ->
+                res.render 'startconflict', context :
+                    chore : chore
+                    scenario : u.scenario
+                    users : users
+
+    web.post '/chores/startconflict', (req, res, next) ->
+        return if not u.authed(req, res)
+        u.parseConflictBody req.body, (conflict) ->
+            conflict.id = db.genKey()
+            newLog =
+                eventtype : 'conflict_start'
+                conflictid : conflict.id
+                date : Date.now()
+                id : db.genKey()
+            db.conflicts.set conflict.id, conflict, () ->
+                db.logs.set newLog.id, newLog, () ->
+                    res.redirect '/conflict/'+conflict.id
+
+    web.get '/conflicts', (req, res, next) ->
+        u.getAll 'conflicts', (conflicts) ->
+            res.render 'conflicts', context :
+                conflicts: conflicts
+
+    web.get '/conflict/:id', (req, res, next) ->
+        u.findConflict req.params.id, next, (conflict) ->
+            res.render 'conflict', context :
+                conflict: conflict

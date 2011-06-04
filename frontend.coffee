@@ -12,9 +12,7 @@ utils     = require('./utils/index.coffee')(db, settings, [
         'payoff'
     ])
  
-require('./routes/main.coffee')(web, db, utils)
-require('./routes/users.coffee')(web, db, utils)
-require('./routes/chores.coffee')(web, db, utils)
-require('./routes/groups.coffee')(web, db, utils)
+for route in ['main', 'users', 'chores', 'groups', 'logs']
+    require('./routes/'+route+'.coffee')(web, db, utils)
 
 web.listen settings.httpPort, utils.loadScenario

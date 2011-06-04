@@ -16,9 +16,9 @@ h2 -> "Logs"
 ul ->
     for log in @logs
         li ->
-            span class:'user', -> "#{log.user.name}"
+            span class:'user', -> "#{log.user?.name}"
             span " did "
-            span class:'chore', -> "#{log.chore.name}"
+            span class:'chore', -> "#{log.chore?.name}"
             span " for "
             span class:'hedon', -> "#{log.log?.hedons}"
             span " Hedons and "

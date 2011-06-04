@@ -3,6 +3,7 @@ module.exports = (settings, db) ->
     this.users = db 'data/users.db'
     this.groups = db 'data/groups.db'
     this.chores = db 'data/chores.db'
+    this.conflicts = db 'data/conflicts.db'
     this.logs = db 'data/logs.db'
 
     this.genKey = () ->

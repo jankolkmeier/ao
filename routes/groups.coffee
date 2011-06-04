@@ -15,6 +15,10 @@ module.exports = (web, db, u) ->
             res.render 'group', context :
                 group : group
 
+    web.get '/api/group/:id', (req, res, next) ->
+        u.findGroup req.params.id, next, (group) ->
+            res.send { group: group }
+
     web.post '/groups/remove/:id', (req, res, next) ->
         return if not u.authed(req, res)
         db.Group.remove { _id : req.params.id }, (err) ->
