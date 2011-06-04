@@ -11,7 +11,7 @@ a href:"/chores/edit/#{@chore.id}", class:'blue', ->
     span 'Edit chore'
 a href:"/chores/do/#{@chore.id}", class:'orange', ->
     span 'Do chore'
-a href:"/chores/conflict/#{@chore.id}", class:'magenta', ->
+a href:"/chores/startconflict/#{@chore.id}", class:'magenta', ->
     span 'Start conflict'
 div ->
     a href:"/chores", -> "View all chores"

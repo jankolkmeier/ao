@@ -7,7 +7,7 @@ module.exports = (web, db, u) ->
                 logs : logs
 
     web.error (err, req, res, next) ->
-        if err instanceof u.DBError or err instanceof u.NotFound
+        if err instanceof u.Err
             return res.render 'error', context : { error : err }
         next(err)
 

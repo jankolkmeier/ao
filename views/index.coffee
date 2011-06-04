@@ -15,12 +15,13 @@ a href:'/Users', ->
 h2 -> "Logs"
 ul ->
     for log in @logs
-        li ->
-            span class:'user', -> "#{log.user?.name}"
-            span " did "
-            span class:'chore', -> "#{log.chore?.name}"
-            span " for "
-            span class:'hedon', -> "#{log.log?.hedons}"
-            span " Hedons and "
-            span class:'collecton', -> "#{log.log?.collectons}"
-            span " Collectons"
+        if log.log.eventtype == "progress" or log.log.eventtype == "conflict_solved"
+            li ->
+                span class:'user', -> "#{log.user?.name}"
+                span " did "
+                span class:'chore', -> "#{log.chore?.name}"
+                span " for "
+                span class:'hedon', -> "#{log.log?.hedons}"
+                span " Hedons and "
+                span class:'collecton', -> "#{log.log?.collectons}"
+                span " Collectons"

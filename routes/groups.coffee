@@ -7,7 +7,6 @@ module.exports = (web, db, u) ->
                 groups : docs
 
     web.get '/groups/new', (req, res) ->
-        if not u.authed(req, res) then return
         res.render 'editgroup'
 
     web.get '/group/:id', (req, res, next) ->
@@ -25,7 +24,6 @@ module.exports = (web, db, u) ->
             return next new u.DBError("Remove Failed", '/groups', err) if err
 
     web.post '/groups/save', (req, res, next) ->
-        return if not u.authed(req, res)
         cb = (group) ->
             group.name = req.body.name
             if not group.id

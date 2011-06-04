@@ -32,7 +32,7 @@ form method:'post', action:"/chores/startconflict", id:'conflictForm', ->
             for user in @users
                 option value:"#{user.id}", -> "#{user.name}"
     input type:'hidden', name:'id', value:"#{@chore.id}"
-    input type:'submit', value:'Save Chore',class:'blue'
+    input type:'submit', value:'Start conflict',class:'blue'
 a href:"/chores", -> "Cancel"
 
 coffeescript ->

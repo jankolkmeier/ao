@@ -9,10 +9,11 @@ utils     = require('./utils/index.coffee')(db, settings, [
         'errors'
         'dbhelper'
         'scenarios'
+        'conflicts'
         'payoff'
     ])
  
-for route in ['main', 'users', 'chores', 'groups', 'logs']
+for route in ['main', 'users', 'chores', 'conflicts', 'groups', 'logs']
     require('./routes/'+route+'.coffee')(web, db, utils)
 
 web.listen settings.httpPort, utils.loadScenario

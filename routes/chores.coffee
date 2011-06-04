@@ -44,56 +44,27 @@ module.exports = (web, db, u) ->
         if not u.authed(req, res, next) then return
         u.getPayoff req.session.user, req.params.id, (err, hedons, collectons, chore) ->
             if err
-                return next new u.PayoffError "Can't Calculate Payoff",
-                    '/chore/'+req.params.id, err
-            newLog =
-                eventtype : 'progress'
-                userid : req.session.user.id
-                choreid : req.params.id
-                groupid : req.session.user.groupid
-                impact : chore.impact
-                hedons : hedons
-                collectons : collectons
-                date : Date.now()
-                id : db.genKey()
-                scene : chore.progress
-                parameters : chore['progress_parameters']
-            db.logs.set newLog.id, newLog, () ->
-                res.redirect '/'
-
-    web.get '/api/conflict/:id', (req, res, next) ->
-        u.findConflict req.params.id, next, (conflict) ->
-            res.send { conflict: conflict }
-
-    web.get '/chores/conflict/:id', (req, res, next) ->
-        return if not u.authed(req, res)
-        u.findChore req.params.id, next, (chore) ->
-            # TODO: ONLY GROUPID USERS!!!
-            u.getAll 'users', (users) ->
-                res.render 'startconflict', context :
-                    chore : chore
-                    scenario : u.scenario
-                    users : users
-
-    web.post '/chores/startconflict', (req, res, next) ->
-        return if not u.authed(req, res)
-        u.parseConflictBody req.body, (conflict) ->
-            conflict.id = db.genKey()
-            newLog =
-                eventtype : 'conflict_start'
-                conflictid : conflict.id
-                date : Date.now()
-                id : db.genKey()
-            db.conflicts.set conflict.id, conflict, () ->
+                return next new u.Err("Can't Calculate Payoff",
+                    '/chore/'+req.params.id)
+            u.checkRunningConflicts req.params.id, (conflicts) ->
+                newLog =
+                    eventtype : 'progress'
+                    userid : req.session.user.id
+                    choreid : req.params.id
+                    groupid : req.session.user.groupid
+                    impact : chore.impact
+                    hedons : hedons
+                    collectons : collectons
+                    date : Date.now()
+                    id : db.genKey()
+                    scene : chore.progress
+                    parameters : chore['progress_parameters']
+                if conflicts.length == 1
+                    newLog.eventtype = 'conflict_solved'
+                    newLog.conflictid = conflicts[0].id
+                    conflicts[0].ended = true
+                    db.conflicts.set conflicts[0].id, conflicts[0]
+                if conflicts.length > 1
+                    console.log "WTF MULTIPLE CONFLICTS???"
                 db.logs.set newLog.id, newLog, () ->
-                    res.redirect '/conflict/'+conflict.id
-
-    web.get '/conflicts', (req, res, next) ->
-        u.getAll 'conflicts', (conflicts) ->
-            res.render 'conflicts', context :
-                conflicts: conflicts
-
-    web.get '/conflict/:id', (req, res, next) ->
-        u.findConflict req.params.id, next, (conflict) ->
-            res.render 'conflict', context :
-                conflict: conflict
+                    res.redirect '/'
