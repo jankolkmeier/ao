@@ -13,14 +13,14 @@ choreProps = {
 h2 "Edit/Add Chore"
 
 form method:'post', action:"/chores/save", id:'choreForm', ->
-    b "Name"
+    div "Name: "
     input type:'text', class:'editchore name', name:'name',
         placeholder:'Chore Name', value:"#{@chore?.name or ''}"
-    b "Description"
+    div "Extra information: "
     input type:'text', class:'editchore desc', name:'desc',
         placeholder:'Description', value:"#{@chore?.desc or ''}"
     for prop,opts of choreProps
-        b "Chore #{prop}: "
+        div "Chore #{prop}: "
         checkedThis = false
         for opt in opts
             if (not @chore and not checkedThis) or @chore?[prop] == opt
@@ -35,7 +35,7 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
     for impact,types of @scenario.scenes
         for type,scenes of types
             div class:"#{impact} #{type} scene", ->
-                b "#{type}: "
+                div "#{type}: "
                 select name:"#{impact}_#{type}", class:"sceneselect #{type}", ->
                     for name,scene of scenes
                         if name == @chore?[type]
@@ -45,7 +45,7 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
                 for name,scene of scenes
                     div class:"#{type} #{name} parameters", ->
                         for id,param of scene.parameters
-                            b "#{param.desc}: "
+                            div "#{param.desc}: "
                             select name:"#{type}_#{name}_#{id}", class:"#{name} #{id}", ->
                                 for item in @scenario.parameters[param.type]
                                     checked = false
@@ -61,15 +61,13 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
     br ""
     if @chore
         input type:'hidden', name:'id', value:"#{@chore.id}"
-    input type:'submit', value:'Save Chore',class:'blue'
-if @error?.errors?.name
-    div class:'error', -> "Name invalid"
-if @chore
-    form method:'post', action:"/chores/remove/#{@chore.id}", ->
-        input type:'submit', class:'red', value:'Remove Chore'
-    a href:"/chore/#{@chore.id}", -> "Cancel"
-else
-    a href:"/chores", -> "Cancel"
+    div class:'center', ->
+        input type:'submit', value:'Save'
+        if @chore
+            a href:"/chores/remove/#{@chore.id}", -> "Delete"
+            a href:"/chore/#{@chore.id}", -> "Cancel"
+        else
+            a href:"/chores", -> "Cancel"
 
 coffeescript ->
     $(document).ready () ->

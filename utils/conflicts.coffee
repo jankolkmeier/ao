@@ -27,12 +27,22 @@ module.exports = (u, db, settings) ->
             running = running and not conflict.ended
             related = (choreid and choreid == conflict.choreid) or not choreid
             if running and related
-                res.push conflict
+                if not choreid
+                    u.findChore conflict.choreid, false, (chore) ->
+                        conflict.chore = chore
+                        if conflict.userid
+                            u.findUser conflict.userid, false, (user) ->
+                                conflict.user = user
+                                res.push conflict
+                        else
+                            res.push conflict
+                else
+                    res.push conflict
 
     u.endUnsolvedConflicts = () ->
         now = Date.now()
         done = () ->
-            console.log "#"
+            #console.log "#"
         db.conflicts.forEach done, (key, conflict) ->
             if (not conflict.ended) and conflict.end < now
                 conflict.ended = true

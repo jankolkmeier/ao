@@ -1,17 +1,13 @@
-h1 -> "Chore Details"
-h2 -> "#{@chore.name}"
-div "Impact: #{@chore?.impact}"
-div "Occurence: #{@chore?.occurence}"
-for type in ['progress', 'conflict']
-    div "#{type}: #{@chore?[type]}"
-    for param in @chore[type+'_parameters']
-        div "#{param.name}: #{param.value}"
+div id:'top', ->
+    h1 "#{@chore.name}"
+    h2 "Reward: #{@scenario.scenes[@chore.impact].progress[@chore.progress].desc}"
 
-a href:"/chores/edit/#{@chore.id}", class:'blue', ->
-    span 'Edit chore'
-a href:"/chores/do/#{@chore.id}", class:'orange', ->
-    span 'Do chore'
-a href:"/chores/startconflict/#{@chore.id}", class:'magenta', ->
-    span 'Start conflict'
-div ->
-    a href:"/chores", -> "View all chores"
+div id:'scale', ->
+    div id:'pointer', style:"margin-top:#{100-@collectons}px", ->
+        span "< #{@collectons}% Payoff for your group"
+
+form action:"/chores/do/#{@chore.id}", method:'POST', ->
+    input type:'submit', value:'I just did it!', class:'button blue'
+
+a href:"/chores/startconflict/#{@chore.id}", class:'button red', ->
+    span 'Somebody else should do it...'

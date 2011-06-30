@@ -8,7 +8,10 @@ module.exports = (u, db) ->
             return cb(id)
         item = db[type].get id
         if not item
-            return next new u.NotFound("Unknown Item", redir, err)
+            if next
+                return next new u.NotFound("Unknown Item", redir, err)
+            else
+                console.log "unknown item"
         cb item
     
     u.getAll = (type, cb) ->

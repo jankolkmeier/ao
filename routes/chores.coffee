@@ -5,8 +5,9 @@ module.exports = (web, db, u) ->
 
     web.get '/chores/new', (req, res) ->
         if not u.authed(req, res) then return
-        res.render 'editchore', context:
-            scenario : u.scenario
+        u.loadScenario () ->
+            res.render 'editchore', context:
+                scenario : u.scenario
   
     web.post '/chores/remove/:id', (req, res, next) ->
         return if not u.authed(req, res)
@@ -18,10 +19,10 @@ module.exports = (web, db, u) ->
         cb = (chore) ->
             u.parseChoreBody chore, req.body, (chore) ->
                 if not chore.id
-                    chore.id = db.genKey()
+                    chore.id = db.keyFromProperty(chore.name)
                 chore.groupid = req.session.user.groupid
                 db.chores.set chore.id, chore, () ->
-                    res.redirect '/chore/'+chore.id
+                    res.redirect '/chores'
         if req.body.id
             u.findChore req.body.id, next, cb
         else
@@ -29,18 +30,23 @@ module.exports = (web, db, u) ->
 
     web.get '/chores/edit/:id', (req, res, next) ->
         if not u.authed(req, res) then return
-        u.findChore req.params.id, next, (chore) ->
-            res.render 'editchore', context :
-                chore : chore
-                scenario : u.scenario
+        u.loadScenario () ->
+            u.findChore req.params.id, next, (chore) ->
+                res.render 'editchore', context :
+                    chore : chore
+                    scenario : u.scenario
 
     web.get '/chore/:id', (req, res, next) ->
-        u.findChore req.params.id, next, (chore) ->
+        if not u.authed(req, res, next) then return
+        u.getPayoff req.session.user, req.params.id, (err, hedons, collectons, chore) ->
             res.render 'chore', context :
                 chore : chore
                 scenario : u.scenario
+                hedons : hedons
+                collectons : collectons
 
-    web.get '/chores/do/:id', (req, res, next) ->
+
+    web.post '/chores/do/:id', (req, res, next) ->
         if not u.authed(req, res, next) then return
         u.getPayoff req.session.user, req.params.id, (err, hedons, collectons, chore) ->
             if err
@@ -67,4 +73,13 @@ module.exports = (web, db, u) ->
                 if conflicts.length > 1
                     console.log "WTF MULTIPLE CONFLICTS???"
                 db.logs.set newLog.id, newLog, () ->
-                    res.redirect '/'
+                    res.redirect '/chores/review/'+newLog.id
+                    
+    web.get '/chores/review/:logid', (req, res, next) ->
+        u.findLog req.params.logid, next, (log) ->
+            u.findChore log.choreid, next, (chore) ->
+                res.render 'review', context : {
+                    log   : log,
+                    chore : chore,
+                }
+

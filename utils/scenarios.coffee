@@ -41,7 +41,7 @@ module.exports = (u, db, settings) ->
         conflict.scene = body.conflict
         conflict.parameters = []
         conflict.start = Date.now()
-        conflict.end = Date.now()+1000*parseInt(body.time)*60
+        conflict.end = Date.now()+1000*parseInt(body.time)*parseInt(body.timeUnit)
         conflict.groupid = chore.groupid
         conflict.desc = u.scenario.scenes[chore.impact].conflict[conflict.scene].desc
         for name,param of u.scenario.scenes[chore.impact].conflict[conflict.scene].parameters

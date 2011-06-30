@@ -9,6 +9,9 @@ module.exports = (settings, db) ->
     this.genKey = () ->
         return (0x2000000000 * Math.random() + (Date.now() & 0x1f)).toString(32)
 
+    this.keyFromProperty = (s) ->
+        return s.replace /[^A-Za-z0-9_-]+/g, ''
+
     console.log "loaded Schema"
     return this
 
