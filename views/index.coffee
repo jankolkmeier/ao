@@ -9,20 +9,32 @@ div ->
     if @user
         div class:'box', ->
             h3 "Active Conflicts"
-            ul ->
-                if @conflicts and @conflicts.length > 0
+            if @conflicts and @conflicts.length > 0
+                ul class:"events", ->
                     for conflict in @conflicts
                         dEnd = new Date(conflict.end)
-                        li ->
-                            "Conflict #{conflict.chore.name} ending on #{dEnd.toLocaleDateString()} at #{dEnd.toLocaleTimeString()}"
-                else
-                    li ->
-                        "No active conflicts!"
+                        li class:"conflict #{conflict.impact}", ->
+                            if conflict.user
+                                user = conflict.user.name+" is"
+                                if conflict.userid == @user.id
+                                    user = "You are"
+                                a href:"/chore/#{conflict.chore.id}", ->
+                                    span "#{user} in a conflict. To solve it, chore <em>#{conflict.chore.name}</em> has to be done before #{dEnd.toLocaleTimeString()}."
+                            else
+                                a href:"/chore/#{conflict.chore.id}", ->
+                                    span "The whole group is in a conflict. To solve it, someone has to do the chore <em>#{conflict.chore.name}</em> before #{dEnd.toLocaleTimeString()}!"
+            else
+                li ->
+                    "No active conflicts!"
             h3 "Latest Events"
-            ul ->
-                for log in @logs
+            ul class:"events", ->
+                index = 0
+                for key,log of @logs
+                    if index >= 5
+                        break
                     if log.log.eventtype == "progress" or log.log.eventtype == "conflict_solved"
-                        li ->
+                        index++
+                        li class:"#{log.log.impact}", ->
                             span class:'user', -> "#{log.user?.name}"
                             span " did "
                             span class:'chore', -> "#{log.chore?.name}"
@@ -32,14 +44,14 @@ div ->
                             span class:'collecton', -> "#{log.log?.collectons}"
                             span " Collectons"
         div class:'center', ->
-            a href:'/chores', ->
+            a class:'button', href:'/chores', ->
                 span 'Chores'
-            a href:'/Users', ->
+            a class:'button', href:'/Users', ->
                 span 'Users'
-            a href:'/groups', ->
+            a class:'button', href:'/groups', ->
                 span 'Groups'
-            a href:'/logout', -> "Logout"
+            a class:'button', href:'/logout', -> "Logout"
     else
         div class:'center', ->
-            a href:'/login', -> "Login"
-            a href:'/register', -> "Register"
+            a class:'button', href:'/login', -> "Login"
+            a class:'button', href:'/register', -> "Register"

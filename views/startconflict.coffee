@@ -45,7 +45,7 @@ form method:'post', action:"/chores/startconflict", id:'conflictForm', ->
         input type:'hidden', name:'id', value:"#{@chore.id}"
     div class:'center', ->
         input type:'submit', value:'Start conflict',class:'blue'
-        a href:"/chore/#{@chore.id}", -> "Cancel"
+        a href:"/chore/#{@chore.id}", class:'button small', -> "Cancel"
 
 coffeescript ->
     $(document).ready () ->

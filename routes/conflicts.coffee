@@ -24,7 +24,7 @@ module.exports = (web, db, u) ->
                 date : Date.now()
                 id : db.genKey()
             u.conflictOverlap conflict, (overlap) ->
-                if overlap
+                if overlap and conflict.impact == "group"
                     next new u.Err("This conflict is already open",
                         '/chore/'+conflict.choreid)
                 else

@@ -20,7 +20,6 @@ module.exports = (u, db, settings) ->
                 chore[attr] = body[chore.impact+'_'+attr]
             else
                 chore[attr] = body[attr]
-            #console.log attr+" <- "+chore[attr]
         for type in ['progress', 'conflict']
             chore[type+'_parameters'] = []
             for name,param of u.scenario.scenes[chore.impact][type][chore[type]].parameters

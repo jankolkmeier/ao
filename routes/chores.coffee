@@ -53,6 +53,12 @@ module.exports = (web, db, u) ->
                 return next new u.Err("Can't Calculate Payoff",
                     '/chore/'+req.params.id)
             u.checkRunningConflicts req.params.id, (conflicts) ->
+                relevantConflicts = []
+                if chore.impact == 'individual'
+                    for conflict in conflicts
+                        if conflict.userid and conflict.userid == req.session.user.id
+                            relevantConflicts.push(conflict)
+                    conflicts = relevantConflicts
                 newLog =
                     eventtype : 'progress'
                     userid : req.session.user.id
@@ -73,12 +79,28 @@ module.exports = (web, db, u) ->
                 if conflicts.length > 1
                     console.log "WTF MULTIPLE CONFLICTS???"
                 db.logs.set newLog.id, newLog, () ->
-                    res.redirect '/chores/review/'+newLog.id
+                    if conflicts.length == 1
+                        res.redirect '/chores/review/'+newLog.id+'/'+conflicts[0].id
+                    else
+                        res.redirect '/chores/review/'+newLog.id
                     
+    web.get '/chores/review/:logid/:conflictid', (req, res, next) ->
+        u.findLog req.params.logid, next, (log) ->
+            u.findChore log.choreid, next, (chore) ->
+                u.findConflict log.conflictid, next, (conflict) ->
+                    console.log conflict
+                    res.render 'review', context : {
+                        scenario : u.scenario
+                        log   : log
+                        chore : chore
+                        conflict : conflict
+                    }
+
     web.get '/chores/review/:logid', (req, res, next) ->
         u.findLog req.params.logid, next, (log) ->
             u.findChore log.choreid, next, (chore) ->
                 res.render 'review', context : {
+                    scenario : u.scenario
                     log   : log,
                     chore : chore,
                 }

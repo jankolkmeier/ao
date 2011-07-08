@@ -49,7 +49,8 @@ module.exports = (u, db) ->
             cb loglist
         db.logs.forEach cbLoop, (key, val) ->
             if true # date younger than since
-               loglist.push({
+                #loglist.push({
+               loglist.splice(0,0,{
                    log: val
                    user: db.users.get val.userid
                    chore: db.chores.get val.choreid

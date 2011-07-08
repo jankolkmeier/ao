@@ -1,8 +1,8 @@
 h1 -> "Conflict Details"
 h2 -> "#{@conflict.desc}"
 
-a href:"/chores/do/#{@conflict.choreid}", class:'orange', ->
-    span 'Do chore'
+a href:"/chore/#{@conflict.choreid}", class:'orange', ->
+    span 'View connected chore'
 
 div ->
     a href:"/conflicts", -> "View all conflicts"
