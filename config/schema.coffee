@@ -6,6 +6,7 @@ module.exports = (settings, db) ->
     this.chores = db 'data/chores.db'
     this.conflicts = db 'data/conflicts.db'
     this.logs = db 'data/logs.db'
+    this.settings = db 'data/settings.db'
 
 
     console.log "loaded Schema"

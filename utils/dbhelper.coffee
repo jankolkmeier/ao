@@ -15,7 +15,7 @@ module.exports = (u, db) ->
         item = db[type].get id
         if not item
             if next
-                return next new u.NotFound("Unknown Item", redir, err)
+                return next new u.Error("Unknown Item", redir)
             else
                 console.log "unknown item"
         cb item
@@ -27,6 +27,9 @@ module.exports = (u, db) ->
         db[type].forEach cbDone, (key, val) ->
             if val
                 res.push(val)
+
+    u.findSettings = (id, next, cb) ->
+        u.findItem 'settings', id, '/settings', next, cb
 
     u.findUser = (id, next, cb) ->
         u.findItem 'users', id, '/users', next, cb
@@ -41,7 +44,7 @@ module.exports = (u, db) ->
         u.findItem 'logs', id, '/logs', next, cb
         
     u.findConflict = (id, next, cb) ->
-        u.findItem 'conflicts', id, '/logs', next, cb
+        u.findItem 'conflicts', id, '/conflicts', next, cb
 
     u.getLog = (since, userid, choreid, next, cb) ->
         #if userid
