@@ -15,7 +15,8 @@ module.exports = (u, db) ->
         item = db[type].get id
         if not item
             if next
-                return next new u.Error("Unknown Item", redir)
+                cb {}
+                #return next new u.Err("Unknown Item", redir)
             else
                 console.log "unknown item"
         cb item

@@ -18,4 +18,9 @@ utils     = require('./utils/index.coffee')(db, settings, [
 for route in ['main', 'users', 'chores', 'conflicts', 'groups', 'api', 'settings']
     require('./routes/'+route+'.coffee')(web, db, utils)
 
-web.listen settings.httpPort, utils.loadScenario
+# Wait a bit until everything is loaded (part above is async)
+# then load scenario and start listening
+setTimeout () ->
+    web.listen settings.httpPort, utils.loadScenario
+    console.log "Listening... "
+, 2000

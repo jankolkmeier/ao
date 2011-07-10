@@ -4,10 +4,6 @@ module.exports = (web, db, u) ->
             u.findSettings 'settings', next, (settings) ->
                 res.render 'settings', context:
                     settings : settings
-        catch Error
-            db.settings.set 'settings', {}, () ->
-                res.redirect '/settings'
-
 
     web.post '/settings/save', (req, res, next) ->
         settings = {}
@@ -25,4 +21,5 @@ module.exports = (web, db, u) ->
             else
                 settings[key] = false
         db.settings.set 'settings', settings, () ->
+            u.loadScenario()
             res.redirect '/settings'
