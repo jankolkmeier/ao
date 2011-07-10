@@ -15,7 +15,7 @@ utils     = require('./utils/index.coffee')(db, settings, [
         'notifier'
     ])
  
-for route in ['main', 'users', 'chores', 'conflicts', 'groups', 'logs']
+for route in ['main', 'users', 'chores', 'conflicts', 'groups', 'api', 'settings']
     require('./routes/'+route+'.coffee')(web, db, utils)
 
 web.listen settings.httpPort, utils.loadScenario

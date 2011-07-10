@@ -51,7 +51,7 @@ module.exports = (u, db, settings) ->
                         eventtype : 'conflict_unsolved'
                         conflictid : conflict.id
                         date : now
-                        id : db.genKey()
+                        id : u.genKey()
                     console.log "Conflict unsolved: "+conflict.scene+" "+now
                     db.logs.set newLog.id, newLog
 

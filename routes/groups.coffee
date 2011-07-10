@@ -14,10 +14,6 @@ module.exports = (web, db, u) ->
             res.render 'group', context :
                 group : group
 
-    web.get '/api/group/:id', (req, res, next) ->
-        u.findGroup req.params.id, next, (group) ->
-            res.send { group: group }
-
     web.post '/groups/remove/:id', (req, res, next) ->
         return if not u.authed(req, res)
         db.Group.remove { _id : req.params.id }, (err) ->
@@ -27,7 +23,7 @@ module.exports = (web, db, u) ->
         cb = (group) ->
             group.name = req.body.name
             if not group.id
-                group.id = db.genKey()
+                group.id = u.genKey()
             db.groups.set group.id, group, () ->
                 res.redirect '/group/'+group.id
         if req.body.id

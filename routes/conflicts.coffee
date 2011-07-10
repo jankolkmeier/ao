@@ -1,8 +1,4 @@
 module.exports = (web, db, u) ->
-    web.get '/api/conflict/:id', (req, res, next) ->
-        u.findConflict req.params.id, next, (conflict) ->
-            res.send { conflict: conflict }
-
     web.get '/chores/startconflict/:id', (req, res, next) ->
         return if not u.authed(req, res)
         u.findChore req.params.id, next, (chore) ->
@@ -16,13 +12,13 @@ module.exports = (web, db, u) ->
     web.post '/chores/startconflict', (req, res, next) ->
         return if not u.authed(req, res)
         u.parseConflictBody req.body, (conflict) ->
-            conflict.id = db.genKey()
+            conflict.id = u.genKey()
             conflict.ended = false
             newLog =
                 eventtype : 'conflict_start'
                 conflictid : conflict.id
                 date : Date.now()
-                id : db.genKey()
+                id : u.genKey()
             u.conflictOverlap conflict, (overlap) ->
                 if overlap and conflict.impact == "group"
                     next new u.Err("This conflict is already open",

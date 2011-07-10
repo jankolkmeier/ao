@@ -19,7 +19,7 @@ module.exports = (web, db, u) ->
         cb = (chore) ->
             u.parseChoreBody chore, req.body, (chore) ->
                 if not chore.id
-                    chore.id = db.keyFromProperty(chore.name)
+                    chore.id = u.keyFromProperty(chore.name)
                 chore.groupid = req.session.user.groupid
                 db.chores.set chore.id, chore, () ->
                     res.redirect '/chores'
@@ -68,7 +68,7 @@ module.exports = (web, db, u) ->
                     hedons : hedons
                     collectons : collectons
                     date : Date.now()
-                    id : db.genKey()
+                    id : u.genKey()
                     scene : chore.progress
                     parameters : chore['progress_parameters']
                 if conflicts.length == 1

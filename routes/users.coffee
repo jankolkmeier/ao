@@ -11,10 +11,6 @@ module.exports = (web, db, u) ->
             res.render 'user', context :
                 user : user
 
-    web.get '/api/user/:id', (req, res, next) ->
-        u.findUser req.params.id, next, (user) ->
-            res.send { user: user }
-
     web.get '/login', (req, res) ->
         res.render 'login', context:
             redirect: req.query.redirect
@@ -46,7 +42,7 @@ module.exports = (web, db, u) ->
             nick  : req.body.nick
             pass  : pass
             mail  : req.body.mail
-            id    : db.genKey()
+            id    : u.genKey()
             groupid : req.body.groupid
         db.users.set newUser.id, newUser, (err) ->
             req.session.user = newUser

@@ -2,6 +2,12 @@
 module.exports = (u, db) ->
     async = require 'async'
 
+    u.genKey = () ->
+        return (0x2000000000 * Math.random() + (Date.now() & 0x1f)).toString(32)
+
+    u.keyFromProperty = (s) ->
+        return s.replace /[^A-Za-z0-9_-]+/g, ''
+
     u.findItem = (type, id, redir, next, cb) ->
         # Hack-ish - if passed thing is already an object...
         if id.name
@@ -49,7 +55,6 @@ module.exports = (u, db) ->
             cb loglist
         db.logs.forEach cbLoop, (key, val) ->
             if true # date younger than since
-                #loglist.push({
                loglist.splice(0,0,{
                    log: val
                    user: db.users.get val.userid
