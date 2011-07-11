@@ -67,12 +67,12 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
     if @chore
         input type:'hidden', name:'id', value:"#{@chore.id}"
     div class:'center', ->
-        input type:'submit', value:'Save'
+        input type:'submit', value:'Save', class:"button"
         if @chore
-            a href:"/chores/remove/#{@chore.id}", -> "Delete"
-            a href:"/chore/#{@chore.id}", -> "Cancel"
+            a href:"/chores/remove/#{@chore.id}", class:"button", -> "Delete"
+            a href:"/chore/#{@chore.id}", class:"button", -> "Cancel"
         else
-            a href:"/chores", -> "Cancel"
+            a href:"/chores", -> "Cancel"#
 
 coffeescript ->
     $(document).ready () ->

@@ -21,6 +21,6 @@ for route in ['main', 'users', 'chores', 'conflicts', 'groups', 'api', 'settings
 # Wait a bit until everything is loaded (part above is async)
 # then load scenario and start listening
 setTimeout () ->
-    web.listen settings.httpPort, utils.loadScenario
+    web.listen settings.httpPort, settings.host, utils.loadScenario
     console.log "Listening... "
 , 2000

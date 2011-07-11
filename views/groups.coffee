@@ -5,5 +5,5 @@ ul ->
     for group in @groups
         li ->
             h3 -> "#{group.name}"
-            a href:"/group/#{group.id}", ->
+            a href:"/group/#{group.id}", class:'button', ->
                 span -> 'Details'

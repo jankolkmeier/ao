@@ -94,6 +94,11 @@ div.box a, div.box button, div.box input[type='submit'], div#top a, div#top butt
     font-size:25px;
 }
 
+input[type="submit"].button {
+    width:100%;
+    margin:0;
+}
+
 a.button, button, input[type='submit'] {
     font-family:'Geo';
     font-weight:normal;

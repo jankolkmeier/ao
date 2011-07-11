@@ -32,9 +32,10 @@ module.exports = (web, db, u) ->
         if not u.authed(req, res) then return
         u.loadScenario () ->
             u.findChore req.params.id, next, (chore) ->
-                res.render 'editchore', context :
-                    chore : chore
-                    scenario : u.scenario
+                if chore
+                    res.render 'editchore', context :
+                        chore : chore
+                        scenario : u.scenario
 
     web.get '/chore/:id', (req, res, next) ->
         if not u.authed(req, res, next) then return

@@ -3,5 +3,5 @@ ul ->
     for user in @users
         li ->
             h3 -> "#{user.name}"
-            a href:"/user/#{user.id}", ->
+            a class:'button', href:"/user/#{user.id}", ->
                 span -> 'Details'
