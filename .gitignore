@@ -4,8 +4,8 @@ desktop.ini
 *.swo
 
 config/settings.coffee
-node_modules
+#node_modules
 data
-node-dirty
-connect-dirty
+#node-dirty
+#connect-dirty
 sessions.db
