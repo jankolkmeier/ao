@@ -6,18 +6,18 @@ module.exports = (u, db, s) ->
 
     u.loadScenario = (cb) ->
         u.findSettings 'settings', false, (settings) ->
-            if not settings.scenarioUri
+            if not settings or not settings.scenarioUri
                 console.log "Couldn't load Scenario because settings aren't made"
-                return
-            request uri:settings.scenarioUri, (err, res, body) ->
-                success = not err and res.statusCode == 200
-                if success
-                    u.scenario = JSON.parse(body)['scenario']
-                    console.log "loaded Scenario"
-                else
-                    console.log "Couldn't load Scenario: "
-                    console.log err
-                cb(not success) if cb
+            else if settings and settings.scenarioUri
+                request uri:settings.scenarioUri, (err, res, body) ->
+                    success = not err and res.statusCode == 200
+                    if success
+                        u.scenario = JSON.parse(body)['scenario']
+                        console.log "loaded Scenario"
+                    else
+                        console.log "Couldn't load Scenario: "
+                        console.log err
+                    cb(not success) if cb
 
     u.parseChoreBody = (chore, body, cb) ->
         for attr in ['name', 'desc', 'impact', 'occurence', 'progress', 'conflict']
