@@ -1,0 +1,10 @@
+{
+  "name": "connect-dirty",
+  "description": "node-dirty session store for Connect",
+  "version": "0.1.0",
+  "author": "Jan Kolkmeier <jouzar@googlemail.com>",
+  "contributors": ["Jan Kolkmeier <jouzar@googlemail.com>"],
+  "dependencies": { "dirty": ">=0.9.4", "connect": ">=1.4.0"},
+  "main": "./lib/connect-dirty",
+  "engines": { "node": ">= 0.9.3" }
+}
