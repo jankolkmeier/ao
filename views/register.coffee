@@ -16,5 +16,5 @@ if @error?.errors?.mail
 if @error?.errors?.name
     div class:'error', -> "Name invalid"
 div ->
-    a href:"/login?redirect=#{@redirect or '/'}", ->
+    a class:'button', href:"/login?redirect=#{@redirect or '/'}", ->
         span -> "Login"

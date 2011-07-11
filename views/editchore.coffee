@@ -23,14 +23,19 @@ form method:'post', action:"/chores/save", id:'choreForm', ->
         div "Chore #{prop}: "
         checkedThis = false
         for opt in opts
-            if (not @chore and not checkedThis) or @chore?[prop] == opt
-                checkedThis = true
+            if opt == 'fixed' or opt == 'once'
                 input type:'radio', class:"editchore #{prop}", name:"#{prop}",
-                    value:"#{opt}", checked:'yes'
+                    value:"#{opt}", disabled:'yes', unchecked:'yes'
+                span class:"grey", -> "#{opt}"
             else
-                input type:'radio', class:"editchore #{prop}", name:"#{prop}",
-                    value:"#{opt}", unchecked:'yes'
-            span "#{opt}"
+                if (not @chore and not checkedThis) or @chore?[prop] == opt
+                    checkedThis = true
+                    input type:'radio', class:"editchore #{prop}", name:"#{prop}",
+                        value:"#{opt}", checked:'yes'
+                else
+                    input type:'radio', class:"editchore #{prop}", name:"#{prop}",
+                        value:"#{opt}", unchecked:'yes'
+                span "#{opt}"
         br ""
     for impact,types of @scenario.scenes
         for type,scenes of types

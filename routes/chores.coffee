@@ -54,6 +54,7 @@ module.exports = (web, db, u) ->
                     '/chore/'+req.params.id)
             u.checkRunningConflicts req.params.id, (conflicts) ->
                 relevantConflicts = []
+                # Check individual chores
                 if chore.impact == 'individual'
                     for conflict in conflicts
                         if conflict.userid and conflict.userid == req.session.user.id

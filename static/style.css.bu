@@ -48,7 +48,7 @@ div#content {
     padding-bottom:50px;
 }
 
-.box, div#top, a.button, button, input[type='submit'] {
+.box, div#top, a, button, input[type='submit'] {
     -moz-border-radius:10px;
     border-radius:10px;
     background:rgba(0,0,0,0.5);
@@ -94,7 +94,7 @@ div.box a, div.box button, div.box input[type='submit'], div#top a, div#top butt
     font-size:25px;
 }
 
-a.button, button, input[type='submit'] {
+a, button, input[type='submit'] {
     font-family:'Geo';
     font-weight:normal;
     display:inline-block;
@@ -115,12 +115,6 @@ a.button {
     display:block;
     margin:12px 0;
     padding:10px 2px;
-}
-
-a.button.small {
-    display:inline-block;
-    padding:5px;
-    margin:3px;
 }
 
 .blue {
@@ -239,42 +233,6 @@ select {
 
 .hidden {
     display:none;
-}
-
-ul.events {
-    padding-left:0;
-    border-top:1px dashed white;
-}
-
-.events li {
-    min-height:64px;
-    margin-left:0;
-    padding:3px;
-    padding-top:6px;
-    padding-left:69px;
-    list-style-type:none;
-    background-position:left top;
-    border-bottom:1px dashed white;
-}
-
-.events .individual {
-    background:url('/singleShip64.png') no-repeat;
-    background-color:rgba(101, 149, 201, 0.3);
-}
-
-.events .group {
-    background:url('/multiShip64.png') no-repeat;
-    background-color:rgba(101, 201, 165, 0.3);
-}
-
-.events .group.conflict {
-    background:url('/multiShipConf64.png') no-repeat;
-    background-color:rgba(222, 104, 104, 0.3);
-}
-
-.events .individual.conflict {
-    background:url('/singleShipConf64.png') no-repeat;
-    background-color:rgba(209, 115, 195, 0.3);
 }
 
 .grey {
